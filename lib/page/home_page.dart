@@ -12,7 +12,6 @@ class _State extends State<HomePage> {
   bool _loading = false;
   @override
   Widget build(BuildContext context) {
-    bool isRunning = GetIt.I<TelegramService>().isRunning;
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -52,11 +51,20 @@ class _State extends State<HomePage> {
         ]),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () =>
-            GetIt.I<NavigationService>().goTo(NavigationService.LOGIN),
+        onPressed: () async {
+          if (!isRunning) {
+            await GetIt.I<TelegramService>().start();
+          } else {
+            GetIt.I<NavigationService>().goTo(NavigationService.LOGIN);
+          }
+        },
         label: const Text('Login page'),
         icon: const Icon(Icons.navigate_next),
       ),
     );
+
   }
+
+    bool get isRunning=>GetIt.I<TelegramService>().isRunning;
+
 }

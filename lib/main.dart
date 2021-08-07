@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: GetIt.I<NavigationService>().navigatorKey,
-      title: 'Flutter Demo',
+      title: 'Pixelegram',
       theme: ThemeData.dark(),
       onGenerateRoute: NavigationService.onGenerateRoute,
     );
