@@ -7,7 +7,7 @@ class DiceStickers extends TdObject {
   /// a DiceStickers return type can be :
   /// * DiceStickersRegular
   /// * DiceStickersSlotMachine
-  factory DiceStickers.fromJson(Map<String, dynamic> json) {
+  static DiceStickers? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case DiceStickersRegular.CONSTRUCTOR:
         return DiceStickersRegular.fromJson(json);

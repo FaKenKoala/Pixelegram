@@ -9,7 +9,7 @@ class ChatType extends TdObject {
   /// * ChatTypeBasicGroup
   /// * ChatTypeSupergroup
   /// * ChatTypeSecret
-  factory ChatType.fromJson(Map<String, dynamic> json) {
+  static ChatType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatTypePrivate.CONSTRUCTOR:
         return ChatTypePrivate.fromJson(json);

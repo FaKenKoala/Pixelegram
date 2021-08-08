@@ -8,7 +8,7 @@ class BackgroundType extends TdObject {
   /// * BackgroundTypeWallpaper
   /// * BackgroundTypePattern
   /// * BackgroundTypeFill
-  factory BackgroundType.fromJson(Map<String, dynamic> json) {
+  static BackgroundType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case BackgroundTypeWallpaper.CONSTRUCTOR:
         return BackgroundTypeWallpaper.fromJson(json);

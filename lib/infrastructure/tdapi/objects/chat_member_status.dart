@@ -11,7 +11,7 @@ class ChatMemberStatus extends TdObject {
   /// * ChatMemberStatusRestricted
   /// * ChatMemberStatusLeft
   /// * ChatMemberStatusBanned
-  factory ChatMemberStatus.fromJson(Map<String, dynamic> json) {
+  static ChatMemberStatus? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatMemberStatusCreator.CONSTRUCTOR:
         return ChatMemberStatusCreator.fromJson(json);

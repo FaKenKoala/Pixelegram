@@ -10,7 +10,7 @@ class ChatActionBar extends TdObject {
   /// * ChatActionBarReportAddBlock
   /// * ChatActionBarAddContact
   /// * ChatActionBarSharePhoneNumber
-  factory ChatActionBar.fromJson(Map<String, dynamic> json) {
+  static ChatActionBar? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatActionBarReportSpam.CONSTRUCTOR:
         return ChatActionBarReportSpam.fromJson(json);

@@ -14,7 +14,7 @@ class PassportElementErrorSource extends TdObject {
   /// * PassportElementErrorSourceTranslationFiles
   /// * PassportElementErrorSourceFile
   /// * PassportElementErrorSourceFiles
-  factory PassportElementErrorSource.fromJson(Map<String, dynamic> json) {
+  static PassportElementErrorSource? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PassportElementErrorSourceUnspecified.CONSTRUCTOR:
         return PassportElementErrorSourceUnspecified.fromJson(json);

@@ -10,7 +10,7 @@ class CallDiscardReason extends TdObject {
   /// * CallDiscardReasonDeclined
   /// * CallDiscardReasonDisconnected
   /// * CallDiscardReasonHungUp
-  factory CallDiscardReason.fromJson(Map<String, dynamic> json) {
+  static CallDiscardReason? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case CallDiscardReasonEmpty.CONSTRUCTOR:
         return CallDiscardReasonEmpty.fromJson(json);

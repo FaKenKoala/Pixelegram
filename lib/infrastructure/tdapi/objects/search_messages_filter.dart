@@ -23,7 +23,7 @@ class SearchMessagesFilter extends TdObject {
   /// * SearchMessagesFilterUnreadMention
   /// * SearchMessagesFilterFailedToSend
   /// * SearchMessagesFilterPinned
-  factory SearchMessagesFilter.fromJson(Map<String, dynamic> json) {
+  static SearchMessagesFilter? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case SearchMessagesFilterEmpty.CONSTRUCTOR:
         return SearchMessagesFilterEmpty.fromJson(json);

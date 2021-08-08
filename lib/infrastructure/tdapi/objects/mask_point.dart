@@ -9,7 +9,7 @@ class MaskPoint extends TdObject {
   /// * MaskPointEyes
   /// * MaskPointMouth
   /// * MaskPointChin
-  factory MaskPoint.fromJson(Map<String, dynamic> json) {
+  static MaskPoint? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case MaskPointForehead.CONSTRUCTOR:
         return MaskPointForehead.fromJson(json);

@@ -7,7 +7,7 @@ class ChatSource extends TdObject {
   /// a ChatSource return type can be :
   /// * ChatSourceMtprotoProxy
   /// * ChatSourcePublicServiceAnnouncement
-  factory ChatSource.fromJson(Map<String, dynamic> json) {
+  static ChatSource? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatSourceMtprotoProxy.CONSTRUCTOR:
         return ChatSourceMtprotoProxy.fromJson(json);

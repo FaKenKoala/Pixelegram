@@ -10,7 +10,7 @@ class CheckChatUsernameResult extends TdObject {
   /// * CheckChatUsernameResultUsernameOccupied
   /// * CheckChatUsernameResultPublicChatsTooMuch
   /// * CheckChatUsernameResultPublicGroupsUnavailable
-  factory CheckChatUsernameResult.fromJson(Map<String, dynamic> json) {
+  static CheckChatUsernameResult? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case CheckChatUsernameResultOk.CONSTRUCTOR:
         return CheckChatUsernameResultOk.fromJson(json);

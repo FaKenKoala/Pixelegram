@@ -12,7 +12,7 @@ class TopChatCategory extends TdObject {
   /// * TopChatCategoryInlineBots
   /// * TopChatCategoryCalls
   /// * TopChatCategoryForwardChats
-  factory TopChatCategory.fromJson(Map<String, dynamic> json) {
+  static TopChatCategory? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case TopChatCategoryUsers.CONSTRUCTOR:
         return TopChatCategoryUsers.fromJson(json);

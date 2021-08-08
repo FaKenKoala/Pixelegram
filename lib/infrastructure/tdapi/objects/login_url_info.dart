@@ -7,7 +7,7 @@ class LoginUrlInfo extends TdObject {
   /// a LoginUrlInfo return type can be :
   /// * LoginUrlInfoOpen
   /// * LoginUrlInfoRequestConfirmation
-  factory LoginUrlInfo.fromJson(Map<String, dynamic> json) {
+  static LoginUrlInfo? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case LoginUrlInfoOpen.CONSTRUCTOR:
         return LoginUrlInfoOpen.fromJson(json);

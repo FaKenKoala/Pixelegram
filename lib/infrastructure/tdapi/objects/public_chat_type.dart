@@ -7,7 +7,7 @@ class PublicChatType extends TdObject {
   /// a PublicChatType return type can be :
   /// * PublicChatTypeHasUsername
   /// * PublicChatTypeIsLocationBased
-  factory PublicChatType.fromJson(Map<String, dynamic> json) {
+  static PublicChatType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PublicChatTypeHasUsername.CONSTRUCTOR:
         return PublicChatTypeHasUsername.fromJson(json);

@@ -7,7 +7,7 @@ class BackgroundFill extends TdObject {
   /// a BackgroundFill return type can be :
   /// * BackgroundFillSolid
   /// * BackgroundFillGradient
-  factory BackgroundFill.fromJson(Map<String, dynamic> json) {
+  static BackgroundFill? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case BackgroundFillSolid.CONSTRUCTOR:
         return BackgroundFillSolid.fromJson(json);

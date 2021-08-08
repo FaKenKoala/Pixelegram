@@ -18,7 +18,7 @@ class ChatAction extends TdObject {
   /// * ChatActionRecordingVideoNote
   /// * ChatActionUploadingVideoNote
   /// * ChatActionCancel
-  factory ChatAction.fromJson(Map<String, dynamic> json) {
+  static ChatAction? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatActionTyping.CONSTRUCTOR:
         return ChatActionTyping.fromJson(json);

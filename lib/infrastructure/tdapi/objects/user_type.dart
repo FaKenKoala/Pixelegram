@@ -9,7 +9,7 @@ class UserType extends TdObject {
   /// * UserTypeDeleted
   /// * UserTypeBot
   /// * UserTypeUnknown
-  factory UserType.fromJson(Map<String, dynamic> json) {
+  static UserType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case UserTypeRegular.CONSTRUCTOR:
         return UserTypeRegular.fromJson(json);

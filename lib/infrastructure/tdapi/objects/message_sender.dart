@@ -7,7 +7,7 @@ class MessageSender extends TdObject {
   /// a MessageSender return type can be :
   /// * MessageSenderUser
   /// * MessageSenderChat
-  factory MessageSender.fromJson(Map<String, dynamic> json) {
+  static MessageSender? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case MessageSenderUser.CONSTRUCTOR:
         return MessageSenderUser.fromJson(json);

@@ -9,7 +9,7 @@ class KeyboardButtonType extends TdObject {
   /// * KeyboardButtonTypeRequestPhoneNumber
   /// * KeyboardButtonTypeRequestLocation
   /// * KeyboardButtonTypeRequestPoll
-  factory KeyboardButtonType.fromJson(Map<String, dynamic> json) {
+  static KeyboardButtonType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case KeyboardButtonTypeText.CONSTRUCTOR:
         return KeyboardButtonTypeText.fromJson(json);

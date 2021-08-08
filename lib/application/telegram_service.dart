@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Directory, Platform;
 
 import 'package:auto_route/auto_route.dart';
@@ -42,7 +43,12 @@ class TelegramService extends ChangeNotifier {
         databaseDirectory: appDir.path,
         filesDirectory: tempDir.path,
         enableStorageOptimizer: true,
-      ).toJson(),
+        useChatInfoDatabase: true,
+        useMessageDatabase: true,
+        useFileDatabase: true,
+        useSecretChats: true,
+      ).toJson()
+        ..removeNull(),
       beforeSend: _logWapper('beforeSend'),
       afterReceive: _afterReceive,
       beforeExecute: _logWapper('beforeExecute'),
@@ -73,60 +79,66 @@ class TelegramService extends ChangeNotifier {
 
   _afterReceive(Map<String, dynamic> event) {
     // _logWapper("_afterReceive")(event);
-
-    switch (event['@type']) {
-      case 'updateAuthorizationState':
-        _handleAuth(event['authorization_state']);
+    TdObject? object = convertToObject(jsonEncode(event));
+    if (object == null) {
+      return;
+    }
+    switch (object.getConstructor()) {
+      case UpdateAuthorizationState.CONSTRUCTOR:
+        _handleAuth((object as UpdateAuthorizationState).authorizationState);
         break;
-      case 'chats':
-        print('会话列表信息: $event');
+      case Chats.CONSTRUCTOR:
+        print('会话列表信息: ${object.toJson()}');
+        (object as Chats).chatIds?.forEach((chatId) {
+          _send(GetChat(chatId: chatId));
+        });
         break;
-      case 'chat':
+      case Chat.CONSTRUCTOR:
+        print('会话: ${object.toJson()}\n\n');
         break;
-      case 'error':
-        print("錯誤: $event");
+      case TdError.CONSTRUCTOR:
+        print("錯誤: ${object.toJson()}");
         break;
-      default:
-        return;
     }
   }
 
-  _handleAuth(Map<String, dynamic> state) {
+  _handleAuth(AuthorizationState? state) {
+    if (state == null) {
+      return;
+    }
     AppRouter appRouter = GetIt.I<AppRouter>();
     PageRouteInfo info;
 
-    switch (state['@type']) {
-      case 'authorizationStateWaitTdlibParameters':
-      case 'authorizationStateWaitEncryptionKey':
-      case 'authorizationStateWaitPassword':
-      case 'authorizationStateWaitOtherDeviceConfirmation':
-      case 'authorizationStateWaitRegistration':
+    switch (state.getConstructor()) {
+      case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
+      case AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
+      case AuthorizationStateWaitPassword.CONSTRUCTOR:
+      case AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR:
+      case AuthorizationStateWaitRegistration.CONSTRUCTOR:
         return;
-      case 'authorizationStateWaitPhoneNumber':
+      case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
         info = LoginPageRoute();
         appRouter.popAndPush(info);
         break;
-      case 'authorizationStateWaitCode':
+      case AuthorizationStateWaitCode.CONSTRUCTOR:
         info = AuthCodePageRoute();
         appRouter.push(info);
         break;
-      case 'authorizationStateReady':
+      case AuthorizationStateReady.CONSTRUCTOR:
         info = ChatListPageRoute();
         appRouter.pushAndPopUntil(info, predicate: (route) {
           return true;
         });
         break;
-      case 'authorizationStateLoggingOut':
-      case 'authorizationStateClosing':
+      case AuthorizationStateLoggingOut.CONSTRUCTOR:
+      case AuthorizationStateClosing.CONSTRUCTOR:
         return;
-      case 'authorizationStateClosed':
+      case AuthorizationStateClosed.CONSTRUCTOR:
         info = SplashPageRoute();
         appRouter.pushAndPopUntil(info, predicate: (route) {
           return true;
         });
         break;
-      default:
-        return;
     }
   }
 
@@ -168,14 +180,20 @@ class TelegramService extends ChangeNotifier {
   }
 
   _execute(TdFunction event) async {
-    await _service?.execute(event.toJson());
+    await _service?.execute(event.toJson()..removeNull());
   }
 
   _sendSync(TdFunction event) async {
-    await _service?.sendSync(event.toJson());
+    await _service?.sendSync(event.toJson()..removeNull());
   }
 
   _send(TdFunction event) async {
-    await _service?.send(event.toJson());
+    await _service?.send(event.toJson()..removeNull());
+  }
+}
+
+extension MapX on Map<String, dynamic> {
+  Map<String, dynamic> removeNull() {
+    return this..removeWhere((key, value) => value == null);
   }
 }

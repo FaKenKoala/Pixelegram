@@ -13,7 +13,7 @@ class UserPrivacySetting extends TdObject {
   /// * UserPrivacySettingAllowCalls
   /// * UserPrivacySettingAllowPeerToPeerCalls
   /// * UserPrivacySettingAllowFindingByPhoneNumber
-  factory UserPrivacySetting.fromJson(Map<String, dynamic> json) {
+  static UserPrivacySetting? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case UserPrivacySettingShowStatus.CONSTRUCTOR:
         return UserPrivacySettingShowStatus.fromJson(json);

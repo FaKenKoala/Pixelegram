@@ -7,7 +7,7 @@ class ChatStatistics extends TdObject {
   /// a ChatStatistics return type can be :
   /// * ChatStatisticsSupergroup
   /// * ChatStatisticsChannel
-  factory ChatStatistics.fromJson(Map<String, dynamic> json) {
+  static ChatStatistics? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatStatisticsSupergroup.CONSTRUCTOR:
         return ChatStatisticsSupergroup.fromJson(json);
@@ -158,8 +158,9 @@ class ChatStatisticsSupergroup extends ChatStatistics {
           this.viewerCount == null ? null : this.viewerCount!.toJson(),
       "sender_count":
           this.senderCount == null ? null : this.senderCount!.toJson(),
-      "member_count_graph":
-          this.memberCountGraph == null ? null : this.memberCountGraph!.toJson(),
+      "member_count_graph": this.memberCountGraph == null
+          ? null
+          : this.memberCountGraph!.toJson(),
       "join_graph": this.joinGraph == null ? null : this.joinGraph!.toJson(),
       "join_by_source_graph": this.joinBySourceGraph == null
           ? null
@@ -303,8 +304,9 @@ class ChatStatisticsChannel extends ChatStatistics {
       "mean_share_count":
           this.meanShareCount == null ? null : this.meanShareCount!.toJson(),
       "enabled_notifications_percentage": this.enabledNotificationsPercentage,
-      "member_count_graph":
-          this.memberCountGraph == null ? null : this.memberCountGraph!.toJson(),
+      "member_count_graph": this.memberCountGraph == null
+          ? null
+          : this.memberCountGraph!.toJson(),
       "join_graph": this.joinGraph == null ? null : this.joinGraph!.toJson(),
       "mute_graph": this.muteGraph == null ? null : this.muteGraph!.toJson(),
       "view_count_by_hour_graph": this.viewCountByHourGraph == null

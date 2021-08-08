@@ -34,7 +34,7 @@ class PageBlock extends TdObject {
   /// * PageBlockDetails
   /// * PageBlockRelatedArticles
   /// * PageBlockMap
-  factory PageBlock.fromJson(Map<String, dynamic> json) {
+  static PageBlock? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PageBlockTitle.CONSTRUCTOR:
         return PageBlockTitle.fromJson(json);

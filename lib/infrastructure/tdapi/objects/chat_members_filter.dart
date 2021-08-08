@@ -12,7 +12,7 @@ class ChatMembersFilter extends TdObject {
   /// * ChatMembersFilterRestricted
   /// * ChatMembersFilterBanned
   /// * ChatMembersFilterBots
-  factory ChatMembersFilter.fromJson(Map<String, dynamic> json) {
+  static ChatMembersFilter? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatMembersFilterContacts.CONSTRUCTOR:
         return ChatMembersFilterContacts.fromJson(json);

@@ -8,7 +8,7 @@ class PageBlockVerticalAlignment extends TdObject {
   /// * PageBlockVerticalAlignmentTop
   /// * PageBlockVerticalAlignmentMiddle
   /// * PageBlockVerticalAlignmentBottom
-  factory PageBlockVerticalAlignment.fromJson(Map<String, dynamic> json) {
+  static PageBlockVerticalAlignment? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PageBlockVerticalAlignmentTop.CONSTRUCTOR:
         return PageBlockVerticalAlignmentTop.fromJson(json);

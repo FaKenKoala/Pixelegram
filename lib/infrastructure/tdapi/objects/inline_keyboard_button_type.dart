@@ -12,7 +12,7 @@ class InlineKeyboardButtonType extends TdObject {
   /// * InlineKeyboardButtonTypeCallbackGame
   /// * InlineKeyboardButtonTypeSwitchInline
   /// * InlineKeyboardButtonTypeBuy
-  factory InlineKeyboardButtonType.fromJson(Map<String, dynamic> json) {
+  static InlineKeyboardButtonType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InlineKeyboardButtonTypeUrl.CONSTRUCTOR:
         return InlineKeyboardButtonTypeUrl.fromJson(json);

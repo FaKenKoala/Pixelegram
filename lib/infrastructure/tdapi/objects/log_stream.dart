@@ -8,7 +8,7 @@ class LogStream extends TdObject {
   /// * LogStreamDefault
   /// * LogStreamFile
   /// * LogStreamEmpty
-  factory LogStream.fromJson(Map<String, dynamic> json) {
+  static LogStream? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case LogStreamDefault.CONSTRUCTOR:
         return LogStreamDefault.fromJson(json);

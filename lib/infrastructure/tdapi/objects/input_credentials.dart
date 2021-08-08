@@ -9,7 +9,7 @@ class InputCredentials extends TdObject {
   /// * InputCredentialsNew
   /// * InputCredentialsAndroidPay
   /// * InputCredentialsApplePay
-  factory InputCredentials.fromJson(Map<String, dynamic> json) {
+  static InputCredentials? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputCredentialsSaved.CONSTRUCTOR:
         return InputCredentialsSaved.fromJson(json);

@@ -9,7 +9,7 @@ class OptionValue extends TdObject {
   /// * OptionValueEmpty
   /// * OptionValueInteger
   /// * OptionValueString
-  factory OptionValue.fromJson(Map<String, dynamic> json) {
+  static OptionValue? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case OptionValueBoolean.CONSTRUCTOR:
         return OptionValueBoolean.fromJson(json);

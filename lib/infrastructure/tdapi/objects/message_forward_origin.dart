@@ -9,7 +9,7 @@ class MessageForwardOrigin extends TdObject {
   /// * MessageForwardOriginChat
   /// * MessageForwardOriginHiddenUser
   /// * MessageForwardOriginChannel
-  factory MessageForwardOrigin.fromJson(Map<String, dynamic> json) {
+  static MessageForwardOrigin? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case MessageForwardOriginUser.CONSTRUCTOR:
         return MessageForwardOriginUser.fromJson(json);

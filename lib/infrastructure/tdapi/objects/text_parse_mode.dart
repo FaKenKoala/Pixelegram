@@ -7,7 +7,7 @@ class TextParseMode extends TdObject {
   /// a TextParseMode return type can be :
   /// * TextParseModeMarkdown
   /// * TextParseModeHTML
-  factory TextParseMode.fromJson(Map<String, dynamic> json) {
+  static TextParseMode? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case TextParseModeMarkdown.CONSTRUCTOR:
         return TextParseModeMarkdown.fromJson(json);

@@ -22,7 +22,7 @@ class TextEntityType extends TdObject {
   /// * TextEntityTypePreCode
   /// * TextEntityTypeTextUrl
   /// * TextEntityTypeMentionName
-  factory TextEntityType.fromJson(Map<String, dynamic> json) {
+  static TextEntityType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case TextEntityTypeMention.CONSTRUCTOR:
         return TextEntityTypeMention.fromJson(json);

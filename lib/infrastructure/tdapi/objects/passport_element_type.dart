@@ -18,7 +18,7 @@ class PassportElementType extends TdObject {
   /// * PassportElementTypeTemporaryRegistration
   /// * PassportElementTypePhoneNumber
   /// * PassportElementTypeEmailAddress
-  factory PassportElementType.fromJson(Map<String, dynamic> json) {
+  static PassportElementType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PassportElementTypePersonalDetails.CONSTRUCTOR:
         return PassportElementTypePersonalDetails.fromJson(json);

@@ -9,7 +9,7 @@ class NotificationGroupType extends TdObject {
   /// * NotificationGroupTypeMentions
   /// * NotificationGroupTypeSecretChat
   /// * NotificationGroupTypeCalls
-  factory NotificationGroupType.fromJson(Map<String, dynamic> json) {
+  static NotificationGroupType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case NotificationGroupTypeMessages.CONSTRUCTOR:
         return NotificationGroupTypeMessages.fromJson(json);

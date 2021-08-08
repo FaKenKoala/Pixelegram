@@ -7,7 +7,7 @@ class SuggestedAction extends TdObject {
   /// a SuggestedAction return type can be :
   /// * SuggestedActionEnableArchiveAndMuteNewChats
   /// * SuggestedActionCheckPhoneNumber
-  factory SuggestedAction.fromJson(Map<String, dynamic> json) {
+  static SuggestedAction? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case SuggestedActionEnableArchiveAndMuteNewChats.CONSTRUCTOR:
         return SuggestedActionEnableArchiveAndMuteNewChats.fromJson(json);

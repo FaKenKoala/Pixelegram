@@ -9,7 +9,7 @@ class TMeUrlType extends TdObject {
   /// * TMeUrlTypeSupergroup
   /// * TMeUrlTypeChatInvite
   /// * TMeUrlTypeStickerSet
-  factory TMeUrlType.fromJson(Map<String, dynamic> json) {
+  static TMeUrlType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case TMeUrlTypeUser.CONSTRUCTOR:
         return TMeUrlTypeUser.fromJson(json);

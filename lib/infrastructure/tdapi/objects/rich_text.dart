@@ -22,7 +22,7 @@ class RichText extends TdObject {
   /// * RichTextAnchor
   /// * RichTextAnchorLink
   /// * RichTexts
-  factory RichText.fromJson(Map<String, dynamic> json) {
+  static RichText? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case RichTextPlain.CONSTRUCTOR:
         return RichTextPlain.fromJson(json);

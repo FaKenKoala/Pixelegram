@@ -16,7 +16,7 @@ class AuthorizationState extends TdObject {
   /// * AuthorizationStateLoggingOut
   /// * AuthorizationStateClosing
   /// * AuthorizationStateClosed
-  factory AuthorizationState.fromJson(Map<String, dynamic> json) {
+  static AuthorizationState? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
         return AuthorizationStateWaitTdlibParameters.fromJson(json);

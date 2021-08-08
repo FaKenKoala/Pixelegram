@@ -10,7 +10,7 @@ class ConnectionState extends TdObject {
   /// * ConnectionStateConnecting
   /// * ConnectionStateUpdating
   /// * ConnectionStateReady
-  factory ConnectionState.fromJson(Map<String, dynamic> json) {
+  static ConnectionState? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ConnectionStateWaitingForNetwork.CONSTRUCTOR:
         return ConnectionStateWaitingForNetwork.fromJson(json);

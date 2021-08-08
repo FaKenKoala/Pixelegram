@@ -50,7 +50,7 @@ class MessageContent extends TdObject {
   /// * MessagePassportDataReceived
   /// * MessageProximityAlertTriggered
   /// * MessageUnsupported
-  factory MessageContent.fromJson(Map<String, dynamic> json) {
+  static MessageContent? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case MessageText.CONSTRUCTOR:
         return MessageText.fromJson(json);

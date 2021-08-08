@@ -9,7 +9,7 @@ class ReplyMarkup extends TdObject {
   /// * ReplyMarkupForceReply
   /// * ReplyMarkupShowKeyboard
   /// * ReplyMarkupInlineKeyboard
-  factory ReplyMarkup.fromJson(Map<String, dynamic> json) {
+  static ReplyMarkup? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ReplyMarkupRemoveKeyboard.CONSTRUCTOR:
         return ReplyMarkupRemoveKeyboard.fromJson(json);

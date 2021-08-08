@@ -7,7 +7,7 @@ class InputSticker extends TdObject {
   /// a InputSticker return type can be :
   /// * InputStickerStatic
   /// * InputStickerAnimated
-  factory InputSticker.fromJson(Map<String, dynamic> json) {
+  static InputSticker? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputStickerStatic.CONSTRUCTOR:
         return InputStickerStatic.fromJson(json);

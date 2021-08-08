@@ -11,7 +11,7 @@ class UserStatus extends TdObject {
   /// * UserStatusRecently
   /// * UserStatusLastWeek
   /// * UserStatusLastMonth
-  factory UserStatus.fromJson(Map<String, dynamic> json) {
+  static UserStatus? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case UserStatusEmpty.CONSTRUCTOR:
         return UserStatusEmpty.fromJson(json);

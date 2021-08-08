@@ -14,7 +14,7 @@ class CallProblem extends TdObject {
   /// * CallProblemDropped
   /// * CallProblemDistortedVideo
   /// * CallProblemPixelatedVideo
-  factory CallProblem.fromJson(Map<String, dynamic> json) {
+  static CallProblem? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case CallProblemEcho.CONSTRUCTOR:
         return CallProblemEcho.fromJson(json);

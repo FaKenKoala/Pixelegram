@@ -8,7 +8,7 @@ class ProxyType extends TdObject {
   /// * ProxyTypeSocks5
   /// * ProxyTypeHttp
   /// * ProxyTypeMtproto
-  factory ProxyType.fromJson(Map<String, dynamic> json) {
+  static ProxyType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ProxyTypeSocks5.CONSTRUCTOR:
         return ProxyTypeSocks5.fromJson(json);

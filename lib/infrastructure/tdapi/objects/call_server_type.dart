@@ -7,7 +7,7 @@ class CallServerType extends TdObject {
   /// a CallServerType return type can be :
   /// * CallServerTypeTelegramReflector
   /// * CallServerTypeWebrtc
-  factory CallServerType.fromJson(Map<String, dynamic> json) {
+  static CallServerType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case CallServerTypeTelegramReflector.CONSTRUCTOR:
         return CallServerTypeTelegramReflector.fromJson(json);

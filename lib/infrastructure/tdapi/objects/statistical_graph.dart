@@ -8,7 +8,7 @@ class StatisticalGraph extends TdObject {
   /// * StatisticalGraphData
   /// * StatisticalGraphAsync
   /// * StatisticalGraphError
-  factory StatisticalGraph.fromJson(Map<String, dynamic> json) {
+  static StatisticalGraph? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case StatisticalGraphData.CONSTRUCTOR:
         return StatisticalGraphData.fromJson(json);

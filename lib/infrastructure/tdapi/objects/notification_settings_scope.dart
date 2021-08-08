@@ -8,7 +8,7 @@ class NotificationSettingsScope extends TdObject {
   /// * NotificationSettingsScopePrivateChats
   /// * NotificationSettingsScopeGroupChats
   /// * NotificationSettingsScopeChannelChats
-  factory NotificationSettingsScope.fromJson(Map<String, dynamic> json) {
+  static NotificationSettingsScope? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case NotificationSettingsScopePrivateChats.CONSTRUCTOR:
         return NotificationSettingsScopePrivateChats.fromJson(json);

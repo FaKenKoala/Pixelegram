@@ -8,7 +8,7 @@ class LanguagePackStringValue extends TdObject {
   /// * LanguagePackStringValueOrdinary
   /// * LanguagePackStringValuePluralized
   /// * LanguagePackStringValueDeleted
-  factory LanguagePackStringValue.fromJson(Map<String, dynamic> json) {
+  static LanguagePackStringValue? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case LanguagePackStringValueOrdinary.CONSTRUCTOR:
         return LanguagePackStringValueOrdinary.fromJson(json);

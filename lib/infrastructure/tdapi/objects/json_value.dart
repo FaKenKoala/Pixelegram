@@ -11,7 +11,7 @@ class JsonValue extends TdObject {
   /// * JsonValueString
   /// * JsonValueArray
   /// * JsonValueObject
-  factory JsonValue.fromJson(Map<String, dynamic> json) {
+  static JsonValue? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case JsonValueNull.CONSTRUCTOR:
         return JsonValueNull.fromJson(json);

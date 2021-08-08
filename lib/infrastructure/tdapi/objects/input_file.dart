@@ -9,7 +9,7 @@ class InputFile extends TdObject {
   /// * InputFileRemote
   /// * InputFileLocal
   /// * InputFileGenerated
-  factory InputFile.fromJson(Map<String, dynamic> json) {
+  static InputFile? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputFileId.CONSTRUCTOR:
         return InputFileId.fromJson(json);

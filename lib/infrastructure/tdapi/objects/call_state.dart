@@ -11,7 +11,7 @@ class CallState extends TdObject {
   /// * CallStateHangingUp
   /// * CallStateDiscarded
   /// * CallStateError
-  factory CallState.fromJson(Map<String, dynamic> json) {
+  static CallState? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case CallStatePending.CONSTRUCTOR:
         return CallStatePending.fromJson(json);

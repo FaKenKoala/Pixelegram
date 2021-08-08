@@ -9,7 +9,7 @@ class CanTransferOwnershipResult extends TdObject {
   /// * CanTransferOwnershipResultPasswordNeeded
   /// * CanTransferOwnershipResultPasswordTooFresh
   /// * CanTransferOwnershipResultSessionTooFresh
-  factory CanTransferOwnershipResult.fromJson(Map<String, dynamic> json) {
+  static CanTransferOwnershipResult? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case CanTransferOwnershipResultOk.CONSTRUCTOR:
         return CanTransferOwnershipResultOk.fromJson(json);

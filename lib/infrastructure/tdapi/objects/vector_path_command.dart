@@ -7,7 +7,7 @@ class VectorPathCommand extends TdObject {
   /// a VectorPathCommand return type can be :
   /// * VectorPathCommandLine
   /// * VectorPathCommandCubicBezierCurve
-  factory VectorPathCommand.fromJson(Map<String, dynamic> json) {
+  static VectorPathCommand? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case VectorPathCommandLine.CONSTRUCTOR:
         return VectorPathCommandLine.fromJson(json);

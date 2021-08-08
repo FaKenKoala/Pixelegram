@@ -12,7 +12,7 @@ class ChatReportReason extends TdObject {
   /// * ChatReportReasonCopyright
   /// * ChatReportReasonUnrelatedLocation
   /// * ChatReportReasonCustom
-  factory ChatReportReason.fromJson(Map<String, dynamic> json) {
+  static ChatReportReason? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatReportReasonSpam.CONSTRUCTOR:
         return ChatReportReasonSpam.fromJson(json);

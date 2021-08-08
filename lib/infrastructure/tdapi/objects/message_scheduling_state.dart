@@ -7,7 +7,7 @@ class MessageSchedulingState extends TdObject {
   /// a MessageSchedulingState return type can be :
   /// * MessageSchedulingStateSendAtDate
   /// * MessageSchedulingStateSendWhenOnline
-  factory MessageSchedulingState.fromJson(Map<String, dynamic> json) {
+  static MessageSchedulingState? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case MessageSchedulingStateSendAtDate.CONSTRUCTOR:
         return MessageSchedulingStateSendAtDate.fromJson(json);

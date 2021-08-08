@@ -7,7 +7,7 @@ class MessageSendingState extends TdObject {
   /// a MessageSendingState return type can be :
   /// * MessageSendingStatePending
   /// * MessageSendingStateFailed
-  factory MessageSendingState.fromJson(Map<String, dynamic> json) {
+  static MessageSendingState? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case MessageSendingStatePending.CONSTRUCTOR:
         return MessageSendingStatePending.fromJson(json);

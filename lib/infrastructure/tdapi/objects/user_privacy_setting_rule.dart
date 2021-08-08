@@ -13,7 +13,7 @@ class UserPrivacySettingRule extends TdObject {
   /// * UserPrivacySettingRuleRestrictContacts
   /// * UserPrivacySettingRuleRestrictUsers
   /// * UserPrivacySettingRuleRestrictChatMembers
-  factory UserPrivacySettingRule.fromJson(Map<String, dynamic> json) {
+  static UserPrivacySettingRule? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case UserPrivacySettingRuleAllowAll.CONSTRUCTOR:
         return UserPrivacySettingRuleAllowAll.fromJson(json);

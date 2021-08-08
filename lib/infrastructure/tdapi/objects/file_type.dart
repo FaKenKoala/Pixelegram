@@ -21,7 +21,7 @@ class FileType extends TdObject {
   /// * FileTypeVideoNote
   /// * FileTypeVoiceNote
   /// * FileTypeWallpaper
-  factory FileType.fromJson(Map<String, dynamic> json) {
+  static FileType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case FileTypeNone.CONSTRUCTOR:
         return FileTypeNone.fromJson(json);

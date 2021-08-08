@@ -8,7 +8,7 @@ class InputChatPhoto extends TdObject {
   /// * InputChatPhotoPrevious
   /// * InputChatPhotoStatic
   /// * InputChatPhotoAnimation
-  factory InputChatPhoto.fromJson(Map<String, dynamic> json) {
+  static InputChatPhoto? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputChatPhotoPrevious.CONSTRUCTOR:
         return InputChatPhotoPrevious.fromJson(json);

@@ -18,7 +18,7 @@ class InputPassportElement extends TdObject {
   /// * InputPassportElementTemporaryRegistration
   /// * InputPassportElementPhoneNumber
   /// * InputPassportElementEmailAddress
-  factory InputPassportElement.fromJson(Map<String, dynamic> json) {
+  static InputPassportElement? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputPassportElementPersonalDetails.CONSTRUCTOR:
         return InputPassportElementPersonalDetails.fromJson(json);
@@ -190,8 +190,9 @@ class InputPassportElementInternalPassport extends InputPassportElement {
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "internal_passport":
-          this.internalPassport == null ? null : this.internalPassport!.toJson(),
+      "internal_passport": this.internalPassport == null
+          ? null
+          : this.internalPassport!.toJson(),
     };
   }
 

@@ -31,7 +31,7 @@ class ChatEventAction extends TdObject {
   /// * ChatEventVoiceChatDiscarded
   /// * ChatEventVoiceChatParticipantIsMutedToggled
   /// * ChatEventVoiceChatMuteNewParticipantsToggled
-  factory ChatEventAction.fromJson(Map<String, dynamic> json) {
+  static ChatEventAction? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ChatEventMessageEdited.CONSTRUCTOR:
         return ChatEventMessageEdited.fromJson(json);

@@ -22,7 +22,7 @@ class InputMessageContent extends TdObject {
   /// * InputMessageInvoice
   /// * InputMessagePoll
   /// * InputMessageForwarded
-  factory InputMessageContent.fromJson(Map<String, dynamic> json) {
+  static InputMessageContent? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputMessageText.CONSTRUCTOR:
         return InputMessageText.fromJson(json);
@@ -163,7 +163,8 @@ class InputMessageAnimation extends InputMessageContent {
       "@type": CONSTRUCTOR,
       "animation": this.animation == null ? null : this.animation!.toJson(),
       "thumbnail": this.thumbnail == null ? null : this.thumbnail!.toJson(),
-      "added_sticker_file_ids": this.addedStickerFileIds!.map((i) => i).toList(),
+      "added_sticker_file_ids":
+          this.addedStickerFileIds!.map((i) => i).toList(),
       "duration": this.duration,
       "width": this.width,
       "height": this.height,
@@ -337,7 +338,8 @@ class InputMessagePhoto extends InputMessageContent {
       "@type": CONSTRUCTOR,
       "photo": this.photo == null ? null : this.photo!.toJson(),
       "thumbnail": this.thumbnail == null ? null : this.thumbnail!.toJson(),
-      "added_sticker_file_ids": this.addedStickerFileIds!.map((i) => i).toList(),
+      "added_sticker_file_ids":
+          this.addedStickerFileIds!.map((i) => i).toList(),
       "width": this.width,
       "height": this.height,
       "caption": this.caption == null ? null : this.caption!.toJson(),
@@ -461,7 +463,8 @@ class InputMessageVideo extends InputMessageContent {
       "@type": CONSTRUCTOR,
       "video": this.video == null ? null : this.video!.toJson(),
       "thumbnail": this.thumbnail == null ? null : this.thumbnail!.toJson(),
-      "added_sticker_file_ids": this.addedStickerFileIds!.map((i) => i).toList(),
+      "added_sticker_file_ids":
+          this.addedStickerFileIds!.map((i) => i).toList(),
       "duration": this.duration,
       "width": this.width,
       "height": this.height,

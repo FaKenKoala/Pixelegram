@@ -16,7 +16,7 @@ class DeviceToken extends TdObject {
   /// * DeviceTokenUbuntuPush
   /// * DeviceTokenBlackBerryPush
   /// * DeviceTokenTizenPush
-  factory DeviceToken.fromJson(Map<String, dynamic> json) {
+  static DeviceToken? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case DeviceTokenFirebaseCloudMessaging.CONSTRUCTOR:
         return DeviceTokenFirebaseCloudMessaging.fromJson(json);

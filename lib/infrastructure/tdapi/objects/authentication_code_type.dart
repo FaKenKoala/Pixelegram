@@ -9,7 +9,7 @@ class AuthenticationCodeType extends TdObject {
   /// * AuthenticationCodeTypeSms
   /// * AuthenticationCodeTypeCall
   /// * AuthenticationCodeTypeFlashCall
-  factory AuthenticationCodeType.fromJson(Map<String, dynamic> json) {
+  static AuthenticationCodeType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR:
         return AuthenticationCodeTypeTelegramMessage.fromJson(json);

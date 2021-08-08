@@ -7,7 +7,7 @@ class InputBackground extends TdObject {
   /// a InputBackground return type can be :
   /// * InputBackgroundLocal
   /// * InputBackgroundRemote
-  factory InputBackground.fromJson(Map<String, dynamic> json) {
+  static InputBackground? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputBackgroundLocal.CONSTRUCTOR:
         return InputBackgroundLocal.fromJson(json);

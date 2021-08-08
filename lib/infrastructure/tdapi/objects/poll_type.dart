@@ -7,7 +7,7 @@ class PollType extends TdObject {
   /// a PollType return type can be :
   /// * PollTypeRegular
   /// * PollTypeQuiz
-  factory PollType.fromJson(Map<String, dynamic> json) {
+  static PollType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PollTypeRegular.CONSTRUCTOR:
         return PollTypeRegular.fromJson(json);

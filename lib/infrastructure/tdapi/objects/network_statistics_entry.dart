@@ -7,7 +7,7 @@ class NetworkStatisticsEntry extends TdObject {
   /// a NetworkStatisticsEntry return type can be :
   /// * NetworkStatisticsEntryFile
   /// * NetworkStatisticsEntryCall
-  factory NetworkStatisticsEntry.fromJson(Map<String, dynamic> json) {
+  static NetworkStatisticsEntry? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case NetworkStatisticsEntryFile.CONSTRUCTOR:
         return NetworkStatisticsEntryFile.fromJson(json);

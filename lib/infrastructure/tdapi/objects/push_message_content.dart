@@ -31,7 +31,7 @@ class PushMessageContent extends TdObject {
   /// * PushMessageContentChatJoinByLink
   /// * PushMessageContentMessageForwards
   /// * PushMessageContentMediaAlbum
-  factory PushMessageContent.fromJson(Map<String, dynamic> json) {
+  static PushMessageContent? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PushMessageContentHidden.CONSTRUCTOR:
         return PushMessageContentHidden.fromJson(json);

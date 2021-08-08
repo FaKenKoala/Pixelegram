@@ -17,7 +17,7 @@ class InlineQueryResult extends TdObject {
   /// * InlineQueryResultSticker
   /// * InlineQueryResultVideo
   /// * InlineQueryResultVoiceNote
-  factory InlineQueryResult.fromJson(Map<String, dynamic> json) {
+  static InlineQueryResult? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InlineQueryResultArticle.CONSTRUCTOR:
         return InlineQueryResultArticle.fromJson(json);

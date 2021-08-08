@@ -13,7 +13,7 @@ class SupergroupMembersFilter extends TdObject {
   /// * SupergroupMembersFilterBanned
   /// * SupergroupMembersFilterMention
   /// * SupergroupMembersFilterBots
-  factory SupergroupMembersFilter.fromJson(Map<String, dynamic> json) {
+  static SupergroupMembersFilter? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case SupergroupMembersFilterRecent.CONSTRUCTOR:
         return SupergroupMembersFilterRecent.fromJson(json);

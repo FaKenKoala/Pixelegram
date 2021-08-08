@@ -11,7 +11,7 @@ class ThumbnailFormat extends TdObject {
   /// * ThumbnailFormatGif
   /// * ThumbnailFormatTgs
   /// * ThumbnailFormatMpeg4
-  factory ThumbnailFormat.fromJson(Map<String, dynamic> json) {
+  static ThumbnailFormat? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case ThumbnailFormatJpeg.CONSTRUCTOR:
         return ThumbnailFormatJpeg.fromJson(json);

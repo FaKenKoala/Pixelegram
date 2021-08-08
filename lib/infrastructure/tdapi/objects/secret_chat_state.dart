@@ -8,7 +8,7 @@ class SecretChatState extends TdObject {
   /// * SecretChatStatePending
   /// * SecretChatStateReady
   /// * SecretChatStateClosed
-  factory SecretChatState.fromJson(Map<String, dynamic> json) {
+  static SecretChatState? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case SecretChatStatePending.CONSTRUCTOR:
         return SecretChatStatePending.fromJson(json);

@@ -9,7 +9,7 @@ class NotificationType extends TdObject {
   /// * NotificationTypeNewSecretChat
   /// * NotificationTypeNewCall
   /// * NotificationTypeNewPushMessage
-  factory NotificationType.fromJson(Map<String, dynamic> json) {
+  static NotificationType? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case NotificationTypeNewMessage.CONSTRUCTOR:
         return NotificationTypeNewMessage.fromJson(json);

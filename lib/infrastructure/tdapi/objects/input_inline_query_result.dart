@@ -17,7 +17,7 @@ class InputInlineQueryResult extends TdObject {
   /// * InputInlineQueryResultVenue
   /// * InputInlineQueryResultVideo
   /// * InputInlineQueryResultVoiceNote
-  factory InputInlineQueryResult.fromJson(Map<String, dynamic> json) {
+  static InputInlineQueryResult? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case InputInlineQueryResultAnimation.CONSTRUCTOR:
         return InputInlineQueryResultAnimation.fromJson(json);

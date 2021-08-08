@@ -88,7 +88,7 @@ class Update extends TdObject {
   /// * UpdateNewCustomQuery
   /// * UpdatePoll
   /// * UpdatePollAnswer
-  factory Update.fromJson(Map<String, dynamic> json) {
+  static Update? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case UpdateAuthorizationState.CONSTRUCTOR:
         return UpdateAuthorizationState.fromJson(json);

@@ -8,7 +8,7 @@ class PageBlockHorizontalAlignment extends TdObject {
   /// * PageBlockHorizontalAlignmentLeft
   /// * PageBlockHorizontalAlignmentCenter
   /// * PageBlockHorizontalAlignmentRight
-  factory PageBlockHorizontalAlignment.fromJson(Map<String, dynamic> json) {
+  static PageBlockHorizontalAlignment? fromJson(Map<String, dynamic> json) {
     switch (json["@type"]) {
       case PageBlockHorizontalAlignmentLeft.CONSTRUCTOR:
         return PageBlockHorizontalAlignmentLeft.fromJson(json);
