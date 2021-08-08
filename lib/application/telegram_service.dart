@@ -3,6 +3,7 @@ import 'dart:io' show Directory, Platform;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' show ChangeNotifier, Navigator;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart' show GetIt;
 import 'package:global_configuration/global_configuration.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -58,6 +59,7 @@ class TelegramService extends ChangeNotifier {
   start() async {
     if (!_service!.isRunning) {
       await _service?.start();
+      await setLogVerbosityLevel();
     }
   }
 
@@ -72,17 +74,29 @@ class TelegramService extends ChangeNotifier {
   }
 
   _afterReceive(Map<String, dynamic> event) {
+    // _logWapper("_afterReceive")(event);
+
     switch (event['@type']) {
       case 'updateAuthorizationState':
-        _logWapper("_afterReceive")(event);
         _handleAuth(event['authorization_state']);
         break;
+      case 'chats':
+        print('会话列表信息: $event');
+        break;
+      case 'chat':
+        break;
+      case 'error':
+        print("錯誤: $event");
+        break;
+      default:
+        return;
     }
   }
 
   _handleAuth(Map<String, dynamic> state) {
     AppRouter appRouter = GetIt.I<AppRouter>();
     PageRouteInfo info;
+
     switch (state['@type']) {
       case 'authorizationStateWaitTdlibParameters':
       case 'authorizationStateWaitEncryptionKey':
@@ -139,6 +153,25 @@ class TelegramService extends ChangeNotifier {
   Future checkAuthenticationPassword(String password) async {
     await _service?.sendSync(
         {'@type': 'checkAuthenticationPassword', 'password': password});
+  }
+
+  Future setLogVerbosityLevel() async {
+    await _service?.execute({
+      '@type': 'setLogVerbosityLevel',
+      "new_verbosity_level": 1,
+    });
+  }
+
+  Future getChats() async {
+    final int64MaxValue = 9223372036854775807;
+    final int32MaxValue = 1 << 31 - 1;
+    _service?.send({
+      '@type': 'getChats',
+      'chat_list': {'@type': 'chatListMain'},
+      'offset_order': int64MaxValue,
+      'offset_chat_id': 0,
+      'limit': int32MaxValue
+    });
   }
 
   Future logOut() async {
