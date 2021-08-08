@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart' show GetIt;
 
-import '../service/mod.dart' show TelegramService, NavigationService;
+import '../application/get_it.dart' show TelegramService, NavigationService;
 
 class HomePage extends StatefulWidget {
   @override
@@ -55,7 +55,7 @@ class _State extends State<HomePage> {
           if (!isRunning) {
             await GetIt.I<TelegramService>().start();
           } else {
-            GetIt.I<NavigationService>().goTo(NavigationService.LOGIN);
+            // GetIt.I<NavigationService>().goTo(NavigationService.LOGIN);
           }
         },
         label: const Text('Login page'),

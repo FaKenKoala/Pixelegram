@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart' show GetIt;
 
 import 'package:libtdjson/libtdjson.dart' show Error;
 
-import '../service/mod.dart' show TelegramService;
+import '../application/get_it.dart' show TelegramService;
 
 class CodePage extends StatefulWidget {
   @override
