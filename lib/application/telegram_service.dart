@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:io' show Directory, Platform;
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart' show ChangeNotifier, Navigator;
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart' show ChangeNotifier;
 import 'package:get_it/get_it.dart' show GetIt;
 import 'package:global_configuration/global_configuration.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,10 +10,10 @@ import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory, getTemporaryDirectory;
 
 import 'package:libtdjson/libtdjson.dart' show Service;
-import 'package:pixelegram/application/app_router.gr.dart';
-import 'package:pixelegram/presentation/login/auth_code_page.dart';
+import 'package:pixelegram/infrastructure/tdapi.dart';
 
-import 'get_it.dart' show NavigationService, LogService;
+import 'app_router.gr.dart';
+import 'get_it.dart' show LogService;
 
 class TelegramService extends ChangeNotifier {
   Service? _service;
@@ -36,15 +35,14 @@ class TelegramService extends ChangeNotifier {
     _service = Service(
       start: false,
       newVerbosityLevel: 3,
-      tdlibParameters: {
-        // 'use_test_dc': true,
-        'api_id': GlobalConfiguration().getValue<int>("telegram_api_id"),
-        'api_hash': GlobalConfiguration().getValue<String>("telegram_api_hash"),
-        'device_model': 'Unknown',
-        'database_directory': appDir.path,
-        'files_directory': tempDir.path,
-        'enable_storage_optimizer': true,
-      },
+      tdlibParameters: TdlibParameters(
+        apiId: GlobalConfiguration().getValue<int>("telegram_api_id"),
+        apiHash: GlobalConfiguration().getValue<String>("telegram_api_hash"),
+        deviceModel: 'Unknown',
+        databaseDirectory: appDir.path,
+        filesDirectory: tempDir.path,
+        enableStorageOptimizer: true,
+      ).toJson(),
       beforeSend: _logWapper('beforeSend'),
       afterReceive: _afterReceive,
       beforeExecute: _logWapper('beforeExecute'),
@@ -130,51 +128,54 @@ class TelegramService extends ChangeNotifier {
       default:
         return;
     }
-    // GetIt.I<AppRouter>().popAndPush(LoginPageRoute());
   }
 
   Future setAuthenticationPhoneNumber(String phoneNumber) async {
-    await _service?.sendSync({
-      '@type': 'setAuthenticationPhoneNumber',
-      'phone_number': phoneNumber,
-      'settings': {
-        'allow_flash_call': false,
-        'is_current_phone_number': false,
-        'allow_sms_retriever_api': false,
-      }
-    });
+    await _sendSync(SetAuthenticationPhoneNumber(
+        phoneNumber: phoneNumber,
+        settings: PhoneNumberAuthenticationSettings(
+          allowFlashCall: false,
+          isCurrentPhoneNumber: false,
+          allowSmsRetrieverApi: false,
+        )));
   }
 
   Future checkAuthenticationCode(String code) async {
-    await _service
-        ?.sendSync({'@type': 'checkAuthenticationCode', 'code': code});
+    await _sendSync(CheckAuthenticationCode(code: code));
   }
 
   Future checkAuthenticationPassword(String password) async {
-    await _service?.sendSync(
-        {'@type': 'checkAuthenticationPassword', 'password': password});
+    await _sendSync(CheckAuthenticationPassword(password: password));
   }
 
   Future setLogVerbosityLevel() async {
-    await _service?.execute({
-      '@type': 'setLogVerbosityLevel',
-      "new_verbosity_level": 1,
-    });
+    _execute(SetLogVerbosityLevel(newVerbosityLevel: 1));
   }
 
   Future getChats() async {
     final int64MaxValue = 9223372036854775807;
     final int32MaxValue = 1 << 31 - 1;
-    _service?.send({
-      '@type': 'getChats',
-      'chat_list': {'@type': 'chatListMain'},
-      'offset_order': int64MaxValue,
-      'offset_chat_id': 0,
-      'limit': int32MaxValue
-    });
+
+    _send(GetChats(
+        chatList: ChatListMain(),
+        offsetOrder: int64MaxValue,
+        offsetChatId: 0,
+        limit: int32MaxValue));
   }
 
   Future logOut() async {
-    await _service?.sendSync({'@type': 'logOut'});
+    await _sendSync(LogOut());
+  }
+
+  _execute(TdFunction event) async {
+    await _service?.execute(event.toJson());
+  }
+
+  _sendSync(TdFunction event) async {
+    await _service?.sendSync(event.toJson());
+  }
+
+  _send(TdFunction event) async {
+    await _service?.send(event.toJson());
   }
 }
