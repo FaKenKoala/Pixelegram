@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pixelegram/application/get_it.dart';
 
 class SplashPage extends StatefulWidget {
@@ -18,6 +21,12 @@ class _SplashPageState extends State<SplashPage> {
 
   startClient() async {
     Future.delayed(Duration(seconds: 2), () async {
+      if (Platform.isAndroid || Platform.isIOS) {
+      PermissionStatus perm = await Permission.storage.request();
+      if (!perm.isGranted) {
+        print('Permission.storage.request(): $perm');
+      }
+    }
       await GetIt.I<TelegramService>().start();
     });
   }

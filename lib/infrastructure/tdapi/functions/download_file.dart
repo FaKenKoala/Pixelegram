@@ -3,7 +3,11 @@ part of '../tdapi.dart';
 class DownloadFile extends TdFunction {
   /// Downloads a file from the cloud. Download progress and completion of the download will be notified through updateFile updates
   DownloadFile(
-      {this.fileId, this.priority, this.offset, this.limit, this.synchronous});
+      {this.fileId,
+      this.priority = 1,
+      this.offset = 0,
+      this.limit = 0,
+      this.synchronous});
 
   /// [fileId] Identifier of the file to download
   int? fileId;

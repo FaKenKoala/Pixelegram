@@ -91,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+          heroTag: 'login',
           onPressed: () {
             sendPhone();
           },

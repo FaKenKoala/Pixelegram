@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart'
 
 import 'package:libtdjson/libtdjson.dart' show Service;
 import 'package:pixelegram/infrastructure/tdapi.dart';
+import 'package:collection/collection.dart';
 
 import 'app_router.gr.dart';
 import 'get_it.dart' show LogService;
@@ -20,39 +21,71 @@ class TelegramService extends ChangeNotifier {
   Service? _service;
   Function(dynamic s) _log = LogService.build('TelegramService');
 
+  late StreamController<int> _chatController;
+
+  List<Chat> chats = [];
+  List<User> users = [];
+  List<UpdateChatPosition> chatPositions = [];
+
   TelegramService() {
+    _chatController = StreamController.broadcast();
     _init();
+  }
+
+  int _value = 0;
+  Stream<int> chatsStream() {
+    return _chatController.stream;
+  }
+
+  _refresh() {
+    chats.sort((a, b) {
+      int positionA = a.positions?.firstOrNull?.order ?? 0;
+      int positionB = b.positions?.firstOrNull?.order ?? 0;
+      return positionB.compareTo(positionA);
+    });
+    _chatController.add(_value++);
   }
 
   _init() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     Directory tempDir = await getTemporaryDirectory();
-    if (Platform.isAndroid || Platform.isIOS) {
-      PermissionStatus perm = await Permission.storage.request();
-      if (!perm.isGranted) {
-        _log('Permission.storage.request(): $perm');
-      }
-    }
+    print('dabaseDirectory: $appDir');
+    print('fielsDirectory: $tempDir');
+    // if (Platform.isAndroid || Platform.isIOS) {
+    //   PermissionStatus perm = await Permission.storage.request();
+    //   if (!perm.isGranted) {
+    //     _log('Permission.storage.request(): $perm');
+    //   }
+    // }
     _service = Service(
       start: false,
-      newVerbosityLevel: 3,
+      newVerbosityLevel: 1,
+
+      /// encryptionKey's length should be 20?
+      encryptionKey: 'wombatkoalapixelgram',
       tdlibParameters: TdlibParameters(
-        apiId: GlobalConfiguration().getValue<int>("telegram_api_id"),
-        apiHash: GlobalConfiguration().getValue<String>("telegram_api_hash"),
-        deviceModel: 'Unknown',
-        databaseDirectory: appDir.path,
-        filesDirectory: tempDir.path,
-        enableStorageOptimizer: true,
-        useChatInfoDatabase: true,
-        useMessageDatabase: true,
-        useFileDatabase: true,
-        useSecretChats: true,
-      ).toJson()
-        ..removeNull(),
+              apiId: GlobalConfiguration().getValue<int>("telegram_api_id"),
+              apiHash:
+                  GlobalConfiguration().getValue<String>("telegram_api_hash"),
+              databaseDirectory: appDir.path,
+              filesDirectory: tempDir.path + '/pixelegram',
+              enableStorageOptimizer: true,
+              useChatInfoDatabase: true,
+              useMessageDatabase: true,
+              useFileDatabase: true,
+              useTestDc: false,
+              useSecretChats: true,
+              ignoreFileNames: true,
+              systemLanguageCode: 'EN',
+              applicationVersion: '0.0.1',
+              deviceModel: 'Unknown',
+              systemVersion: 'Unknown')
+          .toJson()
+            ..removeNull(),
       beforeSend: _logWapper('beforeSend'),
       afterReceive: _afterReceive,
       beforeExecute: _logWapper('beforeExecute'),
-      afterExecute: _logWapper('afterExecute'),
+      afterExecute: _logWapper('\nafterExecute'),
       onReceiveError: _logWapper('onReceiveError', (e) {
         // debugger(when: true);
       }),
@@ -63,7 +96,6 @@ class TelegramService extends ChangeNotifier {
   start() async {
     if (!_service!.isRunning) {
       await _service?.start();
-      await setLogVerbosityLevel();
     }
   }
 
@@ -83,22 +115,45 @@ class TelegramService extends ChangeNotifier {
     if (object == null) {
       return;
     }
-    switch (object.getConstructor()) {
-      case UpdateAuthorizationState.CONSTRUCTOR:
-        _handleAuth((object as UpdateAuthorizationState).authorizationState);
-        break;
-      case Chats.CONSTRUCTOR:
-        print('会话列表信息: ${object.toJson()}');
-        (object as Chats).chatIds?.forEach((chatId) {
-          _send(GetChat(chatId: chatId));
-        });
-        break;
-      case Chat.CONSTRUCTOR:
-        print('会话: ${object.toJson()}\n\n');
-        break;
-      case TdError.CONSTRUCTOR:
-        print("錯誤: ${object.toJson()}");
-        break;
+    if (object is UpdateAuthorizationState) {
+      _handleAuth(object.authorizationState);
+    } else if (object is UpdateNewChat) {
+      print('聊天类型: ${object.chat?.type}');
+      chats = [object.chat!, ...chats];
+      _refresh();
+    } else if (object is UpdateChatLastMessage) {
+      Chat chat = chats.firstWhere((chat) => chat.id == object.chatId!)
+        ..lastMessage = object.lastMessage
+        ..positions = object.positions;
+      // if (object.positions?.isEmpty ?? true) {
+      //   chats = [...chats..remove(chat), chat];
+      // } else {
+      chats = [chat, ...chats..remove(chat)];
+      // }
+      _refresh();
+    } else if (object is UpdateChatPosition) {
+      chats.firstWhere((element) => element.id == object.chatId!).positions = [
+        object.position!
+      ];
+      _refresh();
+    } else if (object is Chats) {
+      print('会话列表信息: ${object.toJson()}');
+    } else if (object is Chat) {
+      // _chatController.add(object);
+    } else if (object is TdError) {
+      print("錯誤: ${object.toJson()}");
+    } else if (object is UpdateFile) {
+      print('文件更新: ${object.toJson()}');
+    } else if (object is UpdateUser) {
+      User? newUser = object.user;
+      if (newUser == null) {
+        return;
+      }
+      users
+        ..removeWhere((user) => user.id == newUser.id)
+        ..add(newUser);
+      print('用户人数:${users.length}');
+      _refresh();
     }
   }
 
@@ -160,10 +215,6 @@ class TelegramService extends ChangeNotifier {
     await _sendSync(CheckAuthenticationPassword(password: password));
   }
 
-  Future setLogVerbosityLevel() async {
-    _execute(SetLogVerbosityLevel(newVerbosityLevel: 1));
-  }
-
   Future getChats() async {
     final int64MaxValue = 9223372036854775807;
     final int32MaxValue = 1 << 31 - 1;
@@ -173,6 +224,18 @@ class TelegramService extends ChangeNotifier {
         offsetOrder: int64MaxValue,
         offsetChatId: 0,
         limit: int32MaxValue));
+  }
+
+  Future getFile(int? fileId) async {
+    if (fileId == null) return;
+    await _sendSync(GetFile(fileId: fileId));
+  }
+
+  Future downloadFile(int? fileId) async {
+    if (fileId == null) {
+      return;
+    }
+    await _send(DownloadFile(fileId: fileId));
   }
 
   Future logOut() async {

@@ -35,6 +35,7 @@ class _AuthCodePageState extends State<AuthCodePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'code',
           onPressed: () {
             sendCode();
           },
