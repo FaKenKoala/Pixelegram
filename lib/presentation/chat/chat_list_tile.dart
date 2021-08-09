@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pixelegram/application/get_it.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
 import 'package:pixelegram/presentation/chat/chat_list_tile_content.dart';
 import '../custom_widget/custom_widget.dart';
@@ -14,13 +16,15 @@ class ChatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int? time = chat.lastMessage?.date;
-    print('时间: $time');
     String dateTime = '';
     if (time != null) {
-      dateTime = DateTime.fromMillisecondsSinceEpoch(time*1000).format();
+      dateTime = DateTime.fromMillisecondsSinceEpoch(time * 1000).format();
     }
 
     int unreadCount = chat.unreadCount ?? 0;
+
+    td.File? photo = chat.photo?.small;
+    String? path = GetIt.I<TelegramService>().getLocalFile(photo?.id);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -29,7 +33,10 @@ class ChatTile extends StatelessWidget {
             height: 60,
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               CircleImage(
-                image: FileImage(File('')),
+                image: FileImage(File(path ?? '')),
+                text: photo?.id == null
+                    ? chat.title?.trim().substring(0, 1)
+                    : null,
               ),
               SizedBox(width: 8),
               Expanded(

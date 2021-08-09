@@ -26,6 +26,7 @@ class TelegramService extends ChangeNotifier {
   List<Chat> chats = [];
   List<User> users = [];
   List<UpdateChatPosition> chatPositions = [];
+  List<File> files = [];
 
   TelegramService() {
     _chatController = StreamController.broadcast();
@@ -33,6 +34,7 @@ class TelegramService extends ChangeNotifier {
   }
 
   int _value = 0;
+
   Stream<int> chatsStream() {
     return _chatController.stream;
   }
@@ -85,7 +87,7 @@ class TelegramService extends ChangeNotifier {
       beforeSend: _logWapper('beforeSend'),
       afterReceive: _afterReceive,
       beforeExecute: _logWapper('beforeExecute'),
-      afterExecute: _logWapper('\nafterExecute'),
+      afterExecute: _logWapper('afterExecute'),
       onReceiveError: _logWapper('onReceiveError', (e) {
         // debugger(when: true);
       }),
@@ -93,6 +95,7 @@ class TelegramService extends ChangeNotifier {
   }
 
   bool get isRunning => _service == null ? false : _service!.isRunning;
+
   start() async {
     if (!_service!.isRunning) {
       await _service?.start();
@@ -110,7 +113,7 @@ class TelegramService extends ChangeNotifier {
   }
 
   _afterReceive(Map<String, dynamic> event) {
-    // _logWapper("_afterReceive")(event);
+    _logWapper("_afterReceive")(event);
     TdObject? object = convertToObject(jsonEncode(event));
     if (object == null) {
       return;
@@ -118,7 +121,7 @@ class TelegramService extends ChangeNotifier {
     if (object is UpdateAuthorizationState) {
       _handleAuth(object.authorizationState);
     } else if (object is UpdateNewChat) {
-      print('聊天类型: ${object.chat?.type}');
+      print('聊天头像: ${object.chat?.photo?.toJson()}');
       chats = [object.chat!, ...chats];
       _refresh();
     } else if (object is UpdateChatLastMessage) {
@@ -144,6 +147,18 @@ class TelegramService extends ChangeNotifier {
       print("錯誤: ${object.toJson()}");
     } else if (object is UpdateFile) {
       print('文件更新: ${object.toJson()}');
+      if (object.file?.local?.isDownloadingCompleted ?? false) {
+        files
+          ..removeWhere((element) => element.id == object.file!.id)
+          ..add(object.file!);
+        _refresh();
+      }
+    } else if (object is File) {
+      print('本地文件: ${object.toJson()}');
+      files
+        ..removeWhere((element) => element.id == object.id)
+        ..add(object);
+      _refresh();
     } else if (object is UpdateUser) {
       User? newUser = object.user;
       if (newUser == null) {
@@ -231,10 +246,21 @@ class TelegramService extends ChangeNotifier {
     await _sendSync(GetFile(fileId: fileId));
   }
 
-  Future downloadFile(int? fileId) async {
+  String? getLocalFile(int? fileId) {
     if (fileId == null) {
-      return;
+      return null;
     }
+    File? file = files.firstWhereOrNull((element) => element.id == fileId);
+    if (file == null) {
+      downloadFile(fileId);
+      return null;
+    }
+    return file.local!.path!;
+  }
+
+  Future downloadFile(int? fileId) async {
+    print('fileId: $fileId');
+    if (fileId == null) return;
     await _send(DownloadFile(fileId: fileId));
   }
 
