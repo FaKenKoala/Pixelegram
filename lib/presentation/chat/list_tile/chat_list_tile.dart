@@ -26,11 +26,12 @@ class ChatListTile extends StatelessWidget {
     String? path = GetIt.I<TelegramService>().getLocalFile(photo?.id);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           Container(
-            // height: 70,
+            height: 64,
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               CircleFileImage(
                 filePath: path,
@@ -43,45 +44,58 @@ class ChatListTile extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${chat.title ?? ''}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${chat.title ?? ''} ${chat.type}',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: ColorsWhite90,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            dateTime,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 4,
                       ),
-                      chat.type is td.ChatTypePrivate
-                          ? PrivateChatListTile(chat: chat)
-                          : GroupChatListTile(chat: chat),
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: chat.type is td.ChatTypePrivate
+                                  ? PrivateChatListTile(chat: chat)
+                                  : GroupChatListTile(chat: chat),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Visibility(
+                              visible: (chat.unreadCount ?? 0) != 0,
+                              child: UnreadCountWidget(
+                                unreadCount: chat.unreadCount,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ]),
               ),
-              SizedBox(
-                width: 4,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    dateTime,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  UnreadCountWidget(
-                    unreadCount: chat.unreadCount,
-                  ),
-                ],
-              ),
             ]),
-          ),
-          SizedBox(
-            height: 8,
           ),
           Divider(height: 1, indent: 68),
         ],
@@ -133,7 +147,7 @@ class GroupChatListTile extends StatelessWidget {
         if (senderName != null)
           Text(senderName,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14, color: Colors.white),
+              style: TextStyle(fontSize: 14, color: ColorsWhite90),
               maxLines: 1),
         if (senderName != null)
           SizedBox(

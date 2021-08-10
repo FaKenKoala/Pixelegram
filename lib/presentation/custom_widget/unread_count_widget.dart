@@ -15,13 +15,13 @@ class UnreadCountWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(
-            color: Colors.black87,
+            color: Colors.grey,
             shape: unreadCount < 10 ? BoxShape.circle : BoxShape.rectangle,
             borderRadius: unreadCount < 10 ? null : BorderRadius.circular(16),
           ),
           child: Text(
             '$unreadCount',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
+            style: TextStyle(fontSize: 14, color: Colors.black87),
           ),
         ),
       ),

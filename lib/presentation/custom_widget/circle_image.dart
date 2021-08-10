@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pixelegram/infrastructure/util.dart';
 
 class CircleImage extends StatelessWidget {
   final ImageProvider image;
   final String? text;
 
-  const CircleImage(
-      {Key? key, required this.image, this.text})
+  const CircleImage({Key? key, required this.image, this.text})
       : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class CircleImage extends StatelessWidget {
       width: 60,
       height: 60,
       decoration: BoxDecoration(
-        color: Colors.lightBlue,
+        color: colorFromText(text),
         shape: BoxShape.circle,
         image: text == null
             ? DecorationImage(image: image, fit: BoxFit.contain)
@@ -25,8 +25,8 @@ class CircleImage extends StatelessWidget {
       child: text != null
           ? Center(
               child: Text(
-                text ?? '',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                text?.toUpperCase() ?? '',
+                style: TextStyle(color: Colors.white, fontSize: 28),
               ),
             )
           : null,
@@ -44,11 +44,12 @@ class CircleFileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool fileExists = filePath != null && File(filePath!).existsSync();
+
     return Container(
       width: 60,
       height: 60,
       decoration: BoxDecoration(
-        color: Colors.lightBlue,
+        color: colorFromText(text),
         shape: BoxShape.circle,
         image: fileExists
             ? DecorationImage(
@@ -58,8 +59,8 @@ class CircleFileImage extends StatelessWidget {
       child: text != null
           ? Center(
               child: Text(
-                text ?? '',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                text?.toUpperCase() ?? '',
+                style: TextStyle(color: Colors.white, fontSize: 28),
               ),
             )
           : null,
