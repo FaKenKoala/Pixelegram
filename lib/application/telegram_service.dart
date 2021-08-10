@@ -24,6 +24,7 @@ class TelegramService extends ChangeNotifier {
   late StreamController<int> _chatController;
 
   List<Chat> chats = [];
+  User? me;
   List<User> users = [];
   List<UpdateChatPosition> chatPositions = [];
   List<File> files = [];
@@ -121,18 +122,28 @@ class TelegramService extends ChangeNotifier {
     if (object is UpdateAuthorizationState) {
       _handleAuth(object.authorizationState);
     } else if (object is UpdateNewChat) {
-      print('聊天头像: ${object.chat?.photo?.toJson()}');
       chats = [object.chat!, ...chats];
       _refresh();
+    } else if (object is UpdateOption) {
+      if (me == null &&
+          object.name == 'my_id' &&
+          object.value is OptionValueInteger) {
+        me = User(id: (object.value as OptionValueInteger).value!);
+      }
+    } else if (object is UpdateUnreadMessageCount) {
+      /// unread message count
+    } else if (object is UpdateChatReadInbox) {
+      /// incoming message unread count
+      chats.firstWhereOrNull((element) => element.id == object.chatId)
+        ?..unreadCount = object.unreadCount
+        ..lastReadInboxMessageId = object.lastReadInboxMessageId;
+      _refresh();
+    } else if (object is UpdateNewMessage) {
     } else if (object is UpdateChatLastMessage) {
       Chat chat = chats.firstWhere((chat) => chat.id == object.chatId!)
         ..lastMessage = object.lastMessage
         ..positions = object.positions;
-      // if (object.positions?.isEmpty ?? true) {
-      //   chats = [...chats..remove(chat), chat];
-      // } else {
       chats = [chat, ...chats..remove(chat)];
-      // }
       _refresh();
     } else if (object is UpdateChatPosition) {
       chats.firstWhere((element) => element.id == object.chatId!).positions = [
@@ -163,6 +174,9 @@ class TelegramService extends ChangeNotifier {
       User? newUser = object.user;
       if (newUser == null) {
         return;
+      }
+      if (newUser.id == me?.id) {
+        me = newUser;
       }
       users
         ..removeWhere((user) => user.id == newUser.id)
@@ -239,6 +253,10 @@ class TelegramService extends ChangeNotifier {
         offsetOrder: int64MaxValue,
         offsetChatId: 0,
         limit: int32MaxValue));
+  }
+
+  Future getUser(int userId) async {
+    await _send(GetUser(userId: userId));
   }
 
   Future getFile(int? fileId) async {

@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pixelegram/application/get_it.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
-import 'package:pixelegram/presentation/chat/chat_list_tile_content.dart';
-import '../custom_widget/custom_widget.dart';
+import 'package:pixelegram/presentation/chat/list_tile/chat_list_tile_content.dart';
+import '../../custom_widget/custom_widget.dart';
 import 'package:pixelegram/infrastructure/util.dart';
+import 'package:collection/collection.dart';
 
-class ChatTile extends StatelessWidget {
+class ChatListTile extends StatelessWidget {
   final td.Chat chat;
 
-  const ChatTile({Key? key, required this.chat}) : super(key: key);
+  const ChatListTile({Key? key, required this.chat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,6 @@ class ChatTile extends StatelessWidget {
     if (time != null) {
       dateTime = DateTime.fromMillisecondsSinceEpoch(time * 1000).format();
     }
-
-    int unreadCount = chat.unreadCount ?? 0;
 
     td.File? photo = chat.photo?.small;
     String? path = GetIt.I<TelegramService>().getLocalFile(photo?.id);
@@ -52,9 +51,12 @@ class ChatTile extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      ChatListTileContent(
-                        chat: chat,
+                      SizedBox(
+                        height: 2,
                       ),
+                      chat.type is td.ChatTypePrivate
+                          ? PrivateChatListTile(chat: chat)
+                          : GroupChatListTile(chat: chat),
                     ]),
               ),
               SizedBox(
@@ -69,24 +71,11 @@ class ChatTile extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  Visibility(
-                    visible: unreadCount != 0,
-                    child: Expanded(
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                              color: Colors.black87,
-                              borderRadius: BorderRadius.circular(16)),
-                          child: Text(
-                            '$unreadCount',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
-                        ),
-                      ),
+                  Expanded(
+                    child: UnreadCountWidget(
+                      unreadCount: chat.unreadCount,
                     ),
-                  )
+                  ),
                 ],
               ),
             ]),
@@ -97,6 +86,64 @@ class ChatTile extends StatelessWidget {
           Divider(height: 1, indent: 68),
         ],
       ),
+    );
+  }
+}
+
+/// PrivateChatTile
+class PrivateChatListTile extends StatelessWidget {
+  final td.Chat chat;
+
+  const PrivateChatListTile({Key? key, required this.chat}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTileMessageContent(
+      message: chat.lastMessage,
+      chatType: chat.type!,
+    );
+  }
+}
+
+/// GroupChatTile
+class GroupChatListTile extends StatelessWidget {
+  final td.Chat chat;
+
+  const GroupChatListTile({Key? key, required this.chat}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String? senderName;
+    td.MessageSender? sender = chat.lastMessage?.sender;
+    if (sender is td.MessageSenderUser) {
+      td.User? me = GetIt.I<TelegramService>().me;
+
+      td.User? user = GetIt.I<TelegramService>()
+          .users
+          .firstWhereOrNull((element) => element.id == sender.userId);
+      if (user != null && me != null && user.id == me.id) {
+        senderName = 'You';
+      } else {
+        senderName = user?.firstName ?? '';
+      }
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (senderName != null)
+          Text(senderName,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 14, color: Colors.white),
+              maxLines: 1),
+        if (senderName != null)
+          SizedBox(
+            height: 2,
+          ),
+        ListTileMessageContent(
+          message: chat.lastMessage,
+          chatType: chat.type!,
+        ),
+      ],
     );
   }
 }
