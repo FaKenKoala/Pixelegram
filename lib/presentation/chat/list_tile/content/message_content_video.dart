@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
 import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
-
+import 'package:pixelegram/infrastructure/util.dart';
 class MessageContentVideo extends StatelessWidget {
   final td.MessageVideo video;
 
@@ -11,8 +11,9 @@ class MessageContentVideo extends StatelessWidget {
   Widget build(BuildContext context) {
     td.Minithumbnail? thumbnail = video.video?.minithumbnail;
     String? data = thumbnail?.data;
-    String name = video.caption?.text ?? 'Video';
+    String name = video.caption?.text?.replaceNewLines() ?? 'Video';
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (data != null)
           Base64Image(
@@ -29,7 +30,12 @@ class MessageContentVideo extends StatelessWidget {
           SizedBox(
             width: 4,
           ),
-        Text('$name')
+        Expanded(
+            child: Text(
+          '$name',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ))
       ],
     );
   }

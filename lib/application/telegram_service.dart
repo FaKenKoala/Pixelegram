@@ -19,8 +19,6 @@ import 'get_it.dart' show LogService;
 
 class TelegramService extends ChangeNotifier {
   Service? _service;
-  Function(dynamic s) _log = LogService.build('TelegramService');
-
   late StreamController<int> _chatController;
 
   List<Chat> chats = [];
@@ -85,11 +83,11 @@ class TelegramService extends ChangeNotifier {
               systemVersion: 'Unknown')
           .toJson()
             ..removeNull(),
-      beforeSend: _logWapper('beforeSend'),
+      beforeSend: _logWrapper('beforeSend'),
       afterReceive: _afterReceive,
-      beforeExecute: _logWapper('beforeExecute'),
-      afterExecute: _logWapper('afterExecute'),
-      onReceiveError: _logWapper('onReceiveError', (e) {
+      beforeExecute: _logWrapper('beforeExecute'),
+      afterExecute: _logWrapper('afterExecute'),
+      onReceiveError: _logWrapper('onReceiveError', (e) {
         // debugger(when: true);
       }),
     );
@@ -109,80 +107,112 @@ class TelegramService extends ChangeNotifier {
     }
   }
 
-  Function(dynamic) _logWapper(String key, [void Function(dynamic obj)? fn]) {
+  Function(dynamic) _logWrapper(String key, [void Function(dynamic obj)? fn]) {
     return LogService.build('TelegramService:$key', fn);
   }
 
   _afterReceive(Map<String, dynamic> event) {
-    _logWapper("_afterReceive")(event);
+    _logWrapper("_afterReceive")(event);
     TdObject? object = convertToObject(jsonEncode(event));
     if (object == null) {
       return;
     }
-    if (object is UpdateAuthorizationState) {
-      _handleAuth(object.authorizationState);
-    } else if (object is UpdateNewChat) {
-      chats = [object.chat!, ...chats];
-      _refresh();
-    } else if (object is UpdateOption) {
-      if (me == null &&
-          object.name == 'my_id' &&
-          object.value is OptionValueInteger) {
-        me = User(id: (object.value as OptionValueInteger).value!);
-      }
-    } else if (object is UpdateUnreadMessageCount) {
-      /// unread message count
-    } else if (object is UpdateChatReadInbox) {
-      /// incoming message unread count
-      chats.firstWhereOrNull((element) => element.id == object.chatId)
-        ?..unreadCount = object.unreadCount
-        ..lastReadInboxMessageId = object.lastReadInboxMessageId;
-      _refresh();
-    } else if (object is UpdateNewMessage) {
-    } else if (object is UpdateChatLastMessage) {
-      Chat chat = chats.firstWhere((chat) => chat.id == object.chatId!)
-        ..lastMessage = object.lastMessage
-        ..positions = object.positions;
-      chats = [chat, ...chats..remove(chat)];
-      _refresh();
-    } else if (object is UpdateChatPosition) {
-      chats.firstWhere((element) => element.id == object.chatId!).positions = [
-        object.position!
-      ];
-      _refresh();
-    } else if (object is Chats) {
-      print('会话列表信息: ${object.toJson()}');
-    } else if (object is Chat) {
-      // _chatController.add(object);
-    } else if (object is TdError) {
-      print("錯誤: ${object.toJson()}");
-    } else if (object is UpdateFile) {
-      print('文件更新: ${object.toJson()}');
-      if (object.file?.local?.isDownloadingCompleted ?? false) {
-        files
-          ..removeWhere((element) => element.id == object.file!.id)
-          ..add(object.file!);
+
+    switch (object.getConstructor()) {
+      case UpdateAuthorizationState.CONSTRUCTOR:
+        UpdateAuthorizationState tdObject = object as UpdateAuthorizationState;
+        _handleAuth(tdObject.authorizationState);
+        break;
+      case UpdateNewChat.CONSTRUCTOR:
+        UpdateNewChat tdObject = object as UpdateNewChat;
+        chats = [tdObject.chat!, ...chats];
         _refresh();
-      }
-    } else if (object is File) {
-      print('本地文件: ${object.toJson()}');
-      files
-        ..removeWhere((element) => element.id == object.id)
-        ..add(object);
-      _refresh();
-    } else if (object is UpdateUser) {
-      User? newUser = object.user;
-      if (newUser == null) {
-        return;
-      }
-      if (newUser.id == me?.id) {
-        me = newUser;
-      }
-      users
-        ..removeWhere((user) => user.id == newUser.id)
-        ..add(newUser);
-      print('用户人数:${users.length}');
-      _refresh();
+        break;
+      case UpdateOption.CONSTRUCTOR:
+        UpdateOption tdObject = object as UpdateOption;
+        if (me == null &&
+            tdObject.name == 'my_id' &&
+            tdObject.value is OptionValueInteger) {
+          me = User(id: (tdObject.value as OptionValueInteger).value!);
+        }
+        break;
+      case UpdateUnreadMessageCount.CONSTRUCTOR:
+        UpdateUnreadMessageCount tdObject = object as UpdateUnreadMessageCount;
+
+        /// unread message count
+        break;
+      case UpdateChatReadInbox.CONSTRUCTOR:
+        UpdateChatReadInbox tdObject = object as UpdateChatReadInbox;
+
+        /// incoming message unread count
+        chats.firstWhereOrNull((element) => element.id == tdObject.chatId)
+          ?..unreadCount = tdObject.unreadCount
+          ..lastReadInboxMessageId = tdObject.lastReadInboxMessageId;
+        _refresh();
+        break;
+      case UpdateNewMessage.CONSTRUCTOR:
+        UpdateNewMessage tdObject = object as UpdateNewMessage;
+        break;
+      case UpdateChatLastMessage.CONSTRUCTOR:
+        UpdateChatLastMessage tdObject = object as UpdateChatLastMessage;
+        Chat chat = chats.firstWhere((chat) => chat.id == tdObject.chatId!)
+          ..lastMessage = tdObject.lastMessage
+          ..positions = tdObject.positions;
+        chats = [chat, ...chats..remove(chat)];
+        _refresh();
+        break;
+      case UpdateChatPosition.CONSTRUCTOR:
+        UpdateChatPosition tdObject = object as UpdateChatPosition;
+        chats
+            .firstWhere((element) => element.id == tdObject.chatId!)
+            .positions = [tdObject.position!];
+        _refresh();
+        break;
+      case Chats.CONSTRUCTOR:
+        Chats tdObject = object as Chats;
+        print('会话列表信息: ${tdObject.toJson()}');
+        break;
+      case Chat.CONSTRUCTOR:
+        Chat tdObject = object as Chat;
+        // _chatController.add(object);
+        break;
+      case TdError.CONSTRUCTOR:
+        TdError tdObject = object as TdError;
+        print("錯誤: ${tdObject.toJson()}");
+        break;
+      case UpdateFile.CONSTRUCTOR:
+        UpdateFile tdObject = object as UpdateFile;
+        print('文件更新: ${tdObject.toJson()}');
+        if (tdObject.file?.local?.isDownloadingCompleted ?? false) {
+          files
+            ..removeWhere((element) => element.id == tdObject.file!.id)
+            ..add(tdObject.file!);
+          _refresh();
+        }
+        break;
+      case File.CONSTRUCTOR:
+        File tdObject = object as File;
+        print('本地文件: ${tdObject.toJson()}');
+        files
+          ..removeWhere((element) => element.id == tdObject.id)
+          ..add(object);
+        _refresh();
+        break;
+      case UpdateUser.CONSTRUCTOR:
+        UpdateUser tdObject = object as UpdateUser;
+        User? newUser = tdObject.user;
+        if (newUser == null) {
+          return;
+        }
+        if (newUser.id == me?.id) {
+          me = newUser;
+        }
+        users
+          ..removeWhere((user) => user.id == newUser.id)
+          ..add(newUser);
+        print('用户人数:${users.length}');
+        _refresh();
+        break;
     }
   }
 
@@ -277,7 +307,6 @@ class TelegramService extends ChangeNotifier {
   }
 
   Future downloadFile(int? fileId) async {
-    print('fileId: $fileId');
     if (fileId == null) return;
     await _send(DownloadFile(fileId: fileId));
   }

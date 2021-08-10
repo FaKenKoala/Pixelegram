@@ -122,12 +122,16 @@ class _ListTileMessageContent extends StatelessWidget {
       );
     } else if (content is td.MessageDice) {
     } else if (content is td.MessageGame) {
+      return MessageContentGame(game: content);
     } else if (content is td.MessagePoll) {
       return MessageContentPoll(
         poll: content,
       );
     } else if (content is td.MessageInvoice) {
     } else if (content is td.MessageCall) {
+      return MessageContentCall(
+        call: content,
+      );
     } else if (content is td.MessageVoiceChatStarted) {
     } else if (content is td.MessageVoiceChatEnded) {
     } else if (content is td.MessageInviteVoiceChatParticipants) {

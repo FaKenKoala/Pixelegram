@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
 import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
-
+import 'package:pixelegram/infrastructure/util.dart';
 class MessageContentPhoto extends StatelessWidget {
   final td.MessagePhoto photo;
 
@@ -11,8 +11,9 @@ class MessageContentPhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     td.Minithumbnail? thumbnail = photo.photo?.minithumbnail;
     String? data = thumbnail?.data;
-    String name = photo.caption?.text ?? 'Photo';
+    String name = photo.caption?.text?.replaceNewLines() ?? 'Photo';
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (data != null) Base64Image(base64Str: data),
         if (data != null)
@@ -23,6 +24,7 @@ class MessageContentPhoto extends StatelessWidget {
             child: Text(
           '$name',
           overflow: TextOverflow.ellipsis,
+          maxLines: 2,
         ))
       ],
     );

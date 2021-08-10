@@ -1,18 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
 
-class MessageContentPoll extends StatelessWidget {
-  final td.MessagePoll poll;
+class MessageContentGame extends StatelessWidget {
+  final td.MessageGame game;
 
-  const MessageContentPoll({Key? key, required this.poll}) : super(key: key);
+  const MessageContentGame({Key? key, required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
-          Icons.poll,
+          Icons.videogame_asset,
           color: Colors.grey,
           size: 18,
         ),
@@ -21,9 +22,8 @@ class MessageContentPoll extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-          '${poll.poll?.question ?? ''}',
+          'Invited you to play ${game.game?.title ?? ''}',
           overflow: TextOverflow.ellipsis,
-          maxLines: 2,
         )),
       ],
     );

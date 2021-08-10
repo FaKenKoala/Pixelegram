@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,18 +22,18 @@ class ChatListTile extends StatelessWidget {
     if (time != null) {
       dateTime = DateTime.fromMillisecondsSinceEpoch(time * 1000).format();
     }
-
     td.File? photo = chat.photo?.small;
     String? path = GetIt.I<TelegramService>().getLocalFile(photo?.id);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
         children: [
           Container(
-            height: 60,
+            // height: 70,
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              CircleImage(
-                image: FileImage(File(path ?? '')),
+              CircleFileImage(
+                filePath: path,
                 text: photo?.id == null
                     ? chat.title?.trim().substring(0, 1)
                     : null,
@@ -43,7 +44,7 @@ class ChatListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        chat.title ?? '',
+                        '${chat.title ?? ''}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16,
@@ -52,7 +53,7 @@ class ChatListTile extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 2,
+                        height: 4,
                       ),
                       chat.type is td.ChatTypePrivate
                           ? PrivateChatListTile(chat: chat)
@@ -63,6 +64,7 @@ class ChatListTile extends StatelessWidget {
                 width: 4,
               ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     dateTime,
@@ -71,10 +73,8 @@ class ChatListTile extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  Expanded(
-                    child: UnreadCountWidget(
-                      unreadCount: chat.unreadCount,
-                    ),
+                  UnreadCountWidget(
+                    unreadCount: chat.unreadCount,
                   ),
                 ],
               ),
@@ -90,7 +90,7 @@ class ChatListTile extends StatelessWidget {
   }
 }
 
-/// PrivateChatTile
+/// PrivateChat
 class PrivateChatListTile extends StatelessWidget {
   final td.Chat chat;
 

@@ -9,3 +9,5 @@ export 'message_content_poll.dart';
 export 'message_content_voice_note.dart';
 export 'message_content_video_note.dart';
 export 'message_content_contact.dart';
+export 'message_content_game.dart';
+export 'message_content_call.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
-
+import 'package:pixelegram/infrastructure/util.dart';
 class MessageContentText extends StatelessWidget {
   final td.ChatType chatType;
 
@@ -13,9 +13,9 @@ class MessageContentText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text.text?.text ?? '',
+      text.text?.text?.replaceNewLines() ?? '',
       overflow: TextOverflow.ellipsis,
-      maxLines: chatType is td.ChatTypePrivate ? 2 : 1,
+      maxLines: chatType is td.ChatTypeBasicGroup ? 1 : 2,
     );
   }
 }

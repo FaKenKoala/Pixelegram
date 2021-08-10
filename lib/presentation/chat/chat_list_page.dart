@@ -13,6 +13,7 @@ class ChatListPage extends StatefulWidget {
 
 class _ChatListPageState extends State<ChatListPage> {
   late Stream<int> chatsStream;
+
   @override
   void initState() {
     super.initState();
@@ -39,29 +40,6 @@ class _ChatListPageState extends State<ChatListPage> {
             itemCount: chats.length,
           );
         },
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'refresh',
-            onPressed: () {
-              _getChats();
-            },
-            child: Icon(
-              Icons.refresh_outlined,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          FloatingActionButton(
-            heroTag: 'logout',
-            onPressed: () async {},
-            child: Icon(Icons.logout, color: Colors.white),
-          )
-        ],
       ),
     );
   }
