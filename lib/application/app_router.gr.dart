@@ -7,6 +7,7 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
+import '../infrastructure/tdapi/tdapi.dart' as _i8;
 import '../presentation/chat/chat_list_page.dart' as _i6;
 import '../presentation/chat/chat_page.dart' as _i7;
 import '../presentation/login/auth_code_page.dart' as _i5;
@@ -41,8 +42,9 @@ class AppRouter extends _i1.RootStackRouter {
         }),
     ChatPageRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
-        builder: (_) {
-          return const _i7.ChatPage();
+        builder: (data) {
+          final args = data.argsAs<ChatPageRouteArgs>();
+          return _i7.ChatPage(key: args.key, chat: args.chat);
         })
   };
 
@@ -80,8 +82,18 @@ class ChatListPageRoute extends _i1.PageRouteInfo {
   static const String name = 'ChatListPageRoute';
 }
 
-class ChatPageRoute extends _i1.PageRouteInfo {
-  const ChatPageRoute() : super(name, path: '/chat-page');
+class ChatPageRoute extends _i1.PageRouteInfo<ChatPageRouteArgs> {
+  ChatPageRoute({_i2.Key? key, required _i8.Chat chat})
+      : super(name,
+            path: '/chat-page', args: ChatPageRouteArgs(key: key, chat: chat));
 
   static const String name = 'ChatPageRoute';
+}
+
+class ChatPageRouteArgs {
+  const ChatPageRouteArgs({this.key, required this.chat});
+
+  final _i2.Key? key;
+
+  final _i8.Chat chat;
 }

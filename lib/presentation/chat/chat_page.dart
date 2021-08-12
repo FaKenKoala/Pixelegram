@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pixelegram/infrastructure/tdapi/tdapi.dart' show Chat;
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({ Key? key }) : super(key: key);
+  final Chat chat;
+  const ChatPage({Key? key, required this.chat}) : super(key: key);
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -10,8 +12,16 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+
+        ),
+        title: Text('${widget.chat.title??'Chat'}'),
+      ),
+      body: Center(
+        child: Text('聊天内容'),
+      ),
     );
   }
 }

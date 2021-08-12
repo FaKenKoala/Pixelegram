@@ -4,41 +4,6 @@ import 'package:pixelegram/presentation/chat/list_tile/content/message_content_v
 import 'package:pixelegram/presentation/chat/list_tile/content/message_content_voice_note.dart';
 import 'content/content.dart';
 
-/// * MessageExpiredPhoto
-/// * MessageExpiredVideo
-/// * MessageVenue
-/// * MessageContact
-/// * MessageDice
-/// * MessageGame
-/// * MessageInvoice
-/// * MessageCall
-/// * MessageVoiceChatStarted
-/// * MessageVoiceChatEnded
-/// * MessageInviteVoiceChatParticipants
-/// * MessageBasicGroupChatCreate
-/// * MessageSupergroupChatCreate
-/// * MessageChatChangeTitle
-/// * MessageChatChangePhoto
-/// * MessageChatDeletePhoto
-/// * MessageChatAddMembers
-/// * MessageChatJoinByLink
-/// * MessageChatDeleteMember
-/// * MessageChatUpgradeTo
-/// * MessageChatUpgradeFrom
-/// * MessagePinMessage
-/// * MessageScreenshotTaken
-/// * MessageChatSetTtl
-/// * MessageCustomServiceAction
-/// * MessageGameScore
-/// * MessagePaymentSuccessful
-/// * MessagePaymentSuccessfulBot
-/// * MessageContactRegistered
-/// * MessageWebsiteConnected
-/// * MessagePassportDataSent
-/// * MessagePassportDataReceived
-/// * MessageProximityAlertTriggered
-/// * MessageUnsupported
-
 class ListTileMessageContent extends StatelessWidget {
   final td.Message? message;
   final td.ChatType chatType;

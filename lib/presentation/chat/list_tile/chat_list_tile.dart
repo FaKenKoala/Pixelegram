@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pixelegram/application/app_router.gr.dart';
 import 'package:pixelegram/application/get_it.dart';
 import 'package:pixelegram/infrastructure/tdapi.dart' as td;
 import 'package:pixelegram/presentation/chat/list_tile/chat_list_tile_content.dart';
@@ -25,80 +26,86 @@ class ChatListTile extends StatelessWidget {
     td.File? photo = chat.photo?.small;
     String? path = GetIt.I<TelegramService>().getLocalFile(photo?.id);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          Container(
-            height: 64,
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              CircleFileImage(
-                filePath: path,
-                text: photo?.id == null
-                    ? chat.title?.trim().substring(0, 1)
-                    : null,
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${chat.title ?? ''} ${chat.type}',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: ColorsWhite90,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            dateTime,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onTap: () {
+        GetIt.I<AppRouter>().navigate(ChatPageRoute(chat: chat));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            Container(
+              height: 64,
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                CircleFileImage(
+                  filePath: path,
+                  text: photo?.id == null
+                      ? chat.title?.trim().substring(0, 1)
+                      : null,
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
                             Expanded(
-                              child: chat.type is td.ChatTypePrivate
-                                  ? PrivateChatListTile(chat: chat)
-                                  : GroupChatListTile(chat: chat),
+                              child: Text(
+                                '${chat.title ?? ''}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: ColorsWhite90,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                             SizedBox(
                               width: 4,
                             ),
-                            Visibility(
-                              visible: (chat.unreadCount ?? 0) != 0,
-                              child: UnreadCountWidget(
-                                unreadCount: chat.unreadCount,
+                            Text(
+                              dateTime,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ]),
-              ),
-            ]),
-          ),
-          Divider(height: 1, indent: 68),
-        ],
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: chat.type is td.ChatTypePrivate
+                                    ? PrivateChatListTile(chat: chat)
+                                    : GroupChatListTile(chat: chat),
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Visibility(
+                                visible: (chat.unreadCount ?? 0) != 0,
+                                child: UnreadCountWidget(
+                                  unreadCount: chat.unreadCount,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                ),
+              ]),
+            ),
+            Divider(height: 1, indent: 68,color: Colors.black,),
+          ],
+        ),
       ),
     );
   }

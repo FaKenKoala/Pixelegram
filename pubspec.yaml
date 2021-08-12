@@ -40,3 +40,6 @@ flutter:
   assets:
     - assets/cfg/
     - assets/images/
+
+scripts: derry.yaml
+
