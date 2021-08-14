@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>pixelegram.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>armv7</string>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>46385B395C077084B733ACC64F9D12F1A2F60793</string>
+				<key>dateExpires</key>
+				<string>2022/8/4</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>armv7</string>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>46385B395C077084B733ACC64F9D12F1A2F60793</string>
+						<key>dateExpires</key>
+						<string>2022/8/4</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>App.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>F469J2Y6K4</string>
+						<key>name</key>
+						<string>Chenpeng Lin</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>armv7</string>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>46385B395C077084B733ACC64F9D12F1A2F60793</string>
+						<key>dateExpires</key>
+						<string>2022/8/4</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>Flutter.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>F469J2Y6K4</string>
+						<key>name</key>
+						<string>Chenpeng Lin</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>46385B395C077084B733ACC64F9D12F1A2F60793</string>
+						<key>dateExpires</key>
+						<string>2022/8/4</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>libtdjson.dylib</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>F469J2Y6K4</string>
+						<key>name</key>
+						<string>Chenpeng Lin</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>armv7</string>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>46385B395C077084B733ACC64F9D12F1A2F60793</string>
+						<key>dateExpires</key>
+						<string>2022/8/4</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>libtdjson.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>F469J2Y6K4</string>
+						<key>name</key>
+						<string>Chenpeng Lin</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>armv7</string>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>46385B395C077084B733ACC64F9D12F1A2F60793</string>
+						<key>dateExpires</key>
+						<string>2022/8/4</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>path_provider.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>F469J2Y6K4</string>
+						<key>name</key>
+						<string>Chenpeng Lin</string>
+					</dict>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>F469J2Y6K4.com.example.pixelegram</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>F469J2Y6K4</string>
+				<key>get-task-allow</key>
+				<true/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>F469J2Y6K4.com.example.pixelegram</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>Runner.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>8402fdde-1a51-42b4-8afa-23b861a26534</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: *</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>F469J2Y6K4</string>
+				<key>name</key>
+				<string>Chenpeng Lin</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
