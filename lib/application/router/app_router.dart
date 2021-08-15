@@ -5,7 +5,9 @@ import 'package:pixelegram/presentation/login/auth_code_page.dart';
 import 'package:pixelegram/presentation/login/login_page.dart';
 import 'package:pixelegram/presentation/splash/splash_page.dart';
 
-@MaterialAutoRouter(routes: [
+@MaterialAutoRouter(
+  preferRelativeImports:false,
+  routes: [
   AutoRoute(page: SplashPage, initial: true),
   AutoRoute(page: LoginPage),
   AutoRoute(page: AuthCodePage),
