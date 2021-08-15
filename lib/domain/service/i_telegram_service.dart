@@ -1,4 +1,4 @@
-import 'package:pixelegram/domain/tdapi/tdapi.dart';
+import 'package:pixelegram/domain/model/tdapi.dart';
 
 abstract class ITelegramService {
   User? get me;

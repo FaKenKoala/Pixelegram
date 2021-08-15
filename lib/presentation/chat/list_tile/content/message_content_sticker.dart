@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/domain/tdapi/tdapi.dart' show MessageSticker;
+import 'package:pixelegram/domain/model/tdapi.dart' show MessageSticker;
 
 class MessageContentSticker extends StatelessWidget {
   final MessageSticker sticker;

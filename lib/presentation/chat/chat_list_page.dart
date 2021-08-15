@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pixelegram/domain/service/i_telegram_service.dart';
-import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
+import 'package:pixelegram/domain/model/tdapi.dart' as td;
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 import 'list_tile/chat_list_tile.dart';
 

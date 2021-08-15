@@ -6,7 +6,7 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
-import 'package:pixelegram/domain/tdapi/tdapi.dart' as _i8;
+import 'package:pixelegram/domain/model/tdapi.dart' as _i8;
 import 'package:pixelegram/presentation/chat/chat_list_page.dart' as _i6;
 import 'package:pixelegram/presentation/chat/chat_page.dart' as _i7;
 import 'package:pixelegram/presentation/login/auth_code_page.dart' as _i5;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
+import 'package:pixelegram/domain/model/tdapi.dart' as td;
 
 class MessageContentContact extends StatelessWidget {
   final td.MessageContact contact;

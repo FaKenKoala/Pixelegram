@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart'
 
 import 'package:libtdjson/libtdjson.dart' show Service;
 import 'package:pixelegram/domain/service/i_telegram_service.dart';
-import 'package:pixelegram/domain/tdapi/tdapi.dart';
+import 'package:pixelegram/domain/model/tdapi.dart';
 import 'package:collection/collection.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 
