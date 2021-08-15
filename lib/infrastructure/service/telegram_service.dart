@@ -10,27 +10,27 @@ import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory, getTemporaryDirectory;
 
 import 'package:libtdjson/libtdjson.dart' show Service;
+import 'package:pixelegram/application/router/router.dart';
 import 'package:pixelegram/domain/service/i_telegram_service.dart';
 import 'package:pixelegram/domain/model/tdapi.dart';
 import 'package:collection/collection.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 
-import '../../application/router/router.dart';
 import 'log_service.dart';
 
 @Singleton(as: ITelegramService)
 class TelegramService implements ITelegramService {
   Service? _service;
   late StreamController<int> _chatController;
-
+  late StreamController<Message> _messageController;
   List<Chat> chats = [];
   User? me;
-  List<User> _users = [];
-  List<UpdateChatPosition> chatPositions = [];
+  List<User> users = [];
   List<File> files = [];
 
   TelegramService() {
     _chatController = StreamController.broadcast();
+    _messageController = StreamController.broadcast();
     _init();
   }
 
@@ -40,14 +40,12 @@ class TelegramService implements ITelegramService {
     return _chatController.stream;
   }
 
-  List<User> get users => _users;
+  Stream<Message> messageStream() {
+    return _messageController.stream;
+  }
 
-  _refresh() {
-    chats.sort((a, b) {
-      int positionA = a.positions?.firstOrNull?.order ?? 0;
-      int positionB = b.positions?.firstOrNull?.order ?? 0;
-      return positionB.compareTo(positionA);
-    });
+  _refreshLastMessage() {
+    chats.sort(chatComparator);
     _chatController.add(_value++);
   }
 
@@ -65,9 +63,8 @@ class TelegramService implements ITelegramService {
     _service = Service(
       start: false,
       newVerbosityLevel: 0, //1,
-
       /// encryptionKey's length should be 20?
-      encryptionKey: 'wombatkoalapixelgram',
+      encryptionKey: GlobalConfiguration().getValue<String>("encryption_key"),
       tdlibParameters: TdlibParameters(
               apiId: GlobalConfiguration().getValue<int>("telegram_api_id"),
               apiHash:
@@ -130,7 +127,7 @@ class TelegramService implements ITelegramService {
       case UpdateNewChat.CONSTRUCTOR:
         UpdateNewChat tdObject = object as UpdateNewChat;
         chats = [tdObject.chat!, ...chats];
-        _refresh();
+        _refreshLastMessage();
         break;
       case UpdateOption.CONSTRUCTOR:
         UpdateOption tdObject = object as UpdateOption;
@@ -152,10 +149,11 @@ class TelegramService implements ITelegramService {
         chats.firstWhereOrNull((element) => element.id == tdObject.chatId)
           ?..unreadCount = tdObject.unreadCount
           ..lastReadInboxMessageId = tdObject.lastReadInboxMessageId;
-        _refresh();
+        _refreshLastMessage();
         break;
       case UpdateNewMessage.CONSTRUCTOR:
         UpdateNewMessage tdObject = object as UpdateNewMessage;
+        _messageController.add(tdObject.message!);
         break;
       case UpdateChatLastMessage.CONSTRUCTOR:
         UpdateChatLastMessage tdObject = object as UpdateChatLastMessage;
@@ -163,14 +161,14 @@ class TelegramService implements ITelegramService {
           ..lastMessage = tdObject.lastMessage
           ..positions = tdObject.positions;
         chats = [chat, ...chats..remove(chat)];
-        _refresh();
+        _refreshLastMessage();
         break;
       case UpdateChatPosition.CONSTRUCTOR:
         UpdateChatPosition tdObject = object as UpdateChatPosition;
         chats
             .firstWhere((element) => element.id == tdObject.chatId!)
             .positions = [tdObject.position!];
-        _refresh();
+        _refreshLastMessage();
         break;
       case Chats.CONSTRUCTOR:
         Chats tdObject = object as Chats;
@@ -191,7 +189,7 @@ class TelegramService implements ITelegramService {
           files
             ..removeWhere((element) => element.id == tdObject.file!.id)
             ..add(tdObject.file!);
-          _refresh();
+          _refreshLastMessage();
         }
         break;
       case File.CONSTRUCTOR:
@@ -200,7 +198,7 @@ class TelegramService implements ITelegramService {
         files
           ..removeWhere((element) => element.id == tdObject.id)
           ..add(object);
-        _refresh();
+        _refreshLastMessage();
         break;
       case UpdateUser.CONSTRUCTOR:
         UpdateUser tdObject = object as UpdateUser;
@@ -211,11 +209,11 @@ class TelegramService implements ITelegramService {
         if (newUser.id == me?.id) {
           me = newUser;
         }
-        _users
+        users
           ..removeWhere((user) => user.id == newUser.id)
           ..add(newUser);
-        print('用户人数:${_users.length}');
-        _refresh();
+        print('用户人数:${users.length}');
+        _refreshLastMessage();
         break;
     }
   }

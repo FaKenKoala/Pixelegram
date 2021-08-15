@@ -10,6 +10,8 @@ abstract class ITelegramService {
   Future getChats();
   Future checkAuthenticationCode(String code);
   Future checkAuthenticationPassword(String password);
-  Stream<int> chatsStream();
   Future setAuthenticationPhoneNumber(String phoneNumber);
+
+  Stream<int> chatsStream();
+  Stream<Message> messageStream();
 }

@@ -8,7 +8,7 @@ import 'package:pixelegram/application/get_it/get_it.dart';
 import 'package:pixelegram/domain/service/i_telegram_service.dart';
 import 'package:pixelegram/domain/model/tdapi.dart' as td;
 import 'package:pixelegram/infrastructure/get_it/main.dart';
-import 'package:pixelegram/presentation/chat/list_tile/chat_list_tile_content.dart';
+import 'package:pixelegram/presentation/chat_list/list_tile/chat_list_tile_content.dart';
 import '../../custom_widget/custom_widget.dart';
 import 'package:pixelegram/infrastructure/util/util.dart';
 import 'package:collection/collection.dart';
