@@ -10,7 +10,7 @@ import 'package:pixelegram/domain/model/tdapi.dart' as td;
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 import 'package:pixelegram/presentation/chat/list_tile/chat_list_tile_content.dart';
 import '../../custom_widget/custom_widget.dart';
-import 'package:pixelegram/infrastructure/util.dart';
+import 'package:pixelegram/infrastructure/util/util.dart';
 import 'package:collection/collection.dart';
 
 class ChatListTile extends StatelessWidget {

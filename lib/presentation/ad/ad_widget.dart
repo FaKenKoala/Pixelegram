@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:pixelegram/infrastructure/util.dart';
+import 'package:pixelegram/infrastructure/util/util.dart';
 
 /// 广告，正式上线将各种unit_id换成生产环境的
 class AdMobWidget extends StatefulWidget {

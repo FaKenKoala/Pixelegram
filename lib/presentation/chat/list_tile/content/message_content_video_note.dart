@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pixelegram/domain/model/tdapi.dart' as td;
-import 'package:pixelegram/infrastructure/util.dart';
+import 'package:pixelegram/infrastructure/util/util.dart';
 
 class MessageContentVideoNote extends StatelessWidget {
   final td.MessageVideoNote videoNote;

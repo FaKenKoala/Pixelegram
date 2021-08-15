@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/util.dart';
+import 'package:pixelegram/infrastructure/util/util.dart';
 
 class CircleImage extends StatelessWidget {
   final ImageProvider image;
