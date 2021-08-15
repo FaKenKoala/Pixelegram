@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 
 class MessageContentLocation extends StatelessWidget {
   final td.MessageLocation location;
@@ -19,7 +19,11 @@ class MessageContentLocation extends StatelessWidget {
         SizedBox(
           width: 4,
         ),
-        Expanded(child: Text('Location', overflow: TextOverflow.ellipsis,)),
+        Expanded(
+            child: Text(
+          'Location',
+          overflow: TextOverflow.ellipsis,
+        )),
       ],
     );
   }

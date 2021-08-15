@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 
 class MessageContentAudio extends StatelessWidget {
   final td.MessageAudio audio;
 
-  const MessageContentAudio({Key? key, required this.audio})
-      : super(key: key);
+  const MessageContentAudio({Key? key, required this.audio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String? text = audio.caption?.text;
-    if(text==null) {
+    if (text == null) {
       String artist = audio.audio?.performer ?? '';
       if (artist.isEmpty) {
         artist = 'Unknown artist';
       }
       String name = audio.audio?.fileName ?? '';
-      text='$artist - $name';
+      text = '$artist - $name';
     }
     return Row(
       children: [
@@ -28,7 +27,11 @@ class MessageContentAudio extends StatelessWidget {
         SizedBox(
           width: 4,
         ),
-        Expanded(child: Text('$text', overflow: TextOverflow.ellipsis,)),
+        Expanded(
+            child: Text(
+          '$text',
+          overflow: TextOverflow.ellipsis,
+        )),
       ],
     );
   }

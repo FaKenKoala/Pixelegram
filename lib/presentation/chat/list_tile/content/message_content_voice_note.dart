@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 import 'package:pixelegram/infrastructure/util.dart';
 
 class MessageContentVoiceNote extends StatelessWidget {
@@ -10,7 +10,7 @@ class MessageContentVoiceNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String name = voiceNote.caption?.text??'Voice Message';
+    String name = voiceNote.caption?.text ?? 'Voice Message';
     return Row(
       children: [
         Icon(

@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pixelegram/application/app_router.gr.dart';
-import 'package:pixelegram/application/get_it.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/application/router/router.dart';
+import 'package:pixelegram/application/get_it/get_it.dart';
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
+import 'package:pixelegram/infrastructure/get_it/main.dart';
 import 'package:pixelegram/presentation/chat/list_tile/chat_list_tile_content.dart';
 import '../../custom_widget/custom_widget.dart';
 import 'package:pixelegram/infrastructure/util.dart';
@@ -24,7 +26,7 @@ class ChatListTile extends StatelessWidget {
       dateTime = DateTime.fromMillisecondsSinceEpoch(time * 1000).format();
     }
     td.File? photo = chat.photo?.small;
-    String? path = GetIt.I<TelegramService>().getLocalFile(photo?.id);
+    String? path = getIt<ITelegramService>().getLocalFile(photo?.id);
 
     return InkWell(
       onTap: () {
@@ -103,7 +105,11 @@ class ChatListTile extends StatelessWidget {
                 ),
               ]),
             ),
-            Divider(height: 1, indent: 68,color: Colors.black,),
+            Divider(
+              height: 1,
+              indent: 68,
+              color: Colors.black,
+            ),
           ],
         ),
       ),
@@ -137,9 +143,9 @@ class GroupChatListTile extends StatelessWidget {
     String? senderName;
     td.MessageSender? sender = chat.lastMessage?.sender;
     if (sender is td.MessageSenderUser) {
-      td.User? me = GetIt.I<TelegramService>().me;
+      td.User? me = getIt<ITelegramService>().me;
 
-      td.User? user = GetIt.I<TelegramService>()
+      td.User? user = getIt<ITelegramService>()
           .users
           .firstWhereOrNull((element) => element.id == sender.userId);
       if (user != null && me != null && user.id == me.id) {

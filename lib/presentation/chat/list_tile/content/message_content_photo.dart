@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
 import 'package:pixelegram/infrastructure/util.dart';
+
 class MessageContentPhoto extends StatelessWidget {
   final td.MessagePhoto photo;
 

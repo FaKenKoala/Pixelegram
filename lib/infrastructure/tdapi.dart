@@ -1,2 +1,0 @@
-
-export 'tdapi/tdapi.dart';

@@ -2,8 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:pixelegram/application/get_it.dart';
+import 'package:pixelegram/application/get_it/get_it.dart';
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/infrastructure/get_it/main.dart';
+import 'package:pixelegram/presentation/ad/ad_widget.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -27,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
           print('Permission.storage.request(): $perm');
         }
       }
-      await GetIt.I<TelegramService>().start();
+      getIt<ITelegramService>().start();
     });
   }
 
@@ -35,7 +39,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset(
+        child: 
+        // AdMobWidget()
+        Image.asset(
           'assets/images/street.jpeg',
           fit: BoxFit.fill,
         ),

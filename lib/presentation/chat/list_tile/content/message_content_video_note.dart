@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 import 'package:pixelegram/infrastructure/util.dart';
 
 class MessageContentVideoNote extends StatelessWidget {
@@ -20,7 +20,8 @@ class MessageContentVideoNote extends StatelessWidget {
         SizedBox(
           width: 4,
         ),
-        Text('Video Message (${TimeUtil.ms(videoNote.videoNote?.duration ?? 0)})'),
+        Text(
+            'Video Message (${TimeUtil.ms(videoNote.videoNote?.duration ?? 0)})'),
       ],
     );
   }

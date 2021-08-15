@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:pixelegram/application/telegram_service.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
+import 'package:pixelegram/infrastructure/get_it/main.dart';
 import 'list_tile/chat_list_tile.dart';
 
 class ChatListPage extends StatefulWidget {
@@ -17,12 +17,12 @@ class _ChatListPageState extends State<ChatListPage> {
   @override
   void initState() {
     super.initState();
-    chatsStream = GetIt.I<TelegramService>().chatsStream();
+    chatsStream = getIt<ITelegramService>().chatsStream();
     _getChats();
   }
 
   _getChats() {
-    GetIt.I<TelegramService>().getChats();
+    getIt<ITelegramService>().getChats();
   }
 
   @override
@@ -34,7 +34,7 @@ class _ChatListPageState extends State<ChatListPage> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          List<td.Chat> chats = GetIt.I<TelegramService>().chats;
+          List<td.Chat> chats = getIt<ITelegramService>().chats;
           return ListView.builder(
             itemBuilder: (_, pos) => ChatListTile(chat: chats[pos]),
             itemCount: chats.length,

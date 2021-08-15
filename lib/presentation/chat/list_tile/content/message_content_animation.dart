@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
-
 
 class MessageContentAnimation extends StatelessWidget {
   final td.MessageAnimation animation;
@@ -15,8 +14,7 @@ class MessageContentAnimation extends StatelessWidget {
     String? data = thumbnail?.data;
     return Row(
       children: [
-        if (data != null)
-          Base64Image(base64Str:data),
+        if (data != null) Base64Image(base64Str: data),
         if (data != null)
           SizedBox(
             width: 4,

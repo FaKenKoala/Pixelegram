@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pixelegram/application/telegram_service.dart';
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/infrastructure/get_it/main.dart';
+import 'package:pixelegram/infrastructure/service/telegram_service.dart';
 
 class AuthCodePage extends StatefulWidget {
   const AuthCodePage({Key? key}) : super(key: key);
@@ -62,6 +64,6 @@ class _AuthCodePageState extends State<AuthCodePage> {
     setState(() {
       isSending = !isSending;
     });
-    GetIt.I<TelegramService>().checkAuthenticationCode(code);
+    getIt<ITelegramService>().checkAuthenticationCode(code);
   }
 }

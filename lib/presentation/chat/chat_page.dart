@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi/tdapi.dart' show Chat;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' show Chat;
 
 class ChatPage extends StatefulWidget {
   final Chat chat;

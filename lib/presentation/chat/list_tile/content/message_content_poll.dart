@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 
 class MessageContentPoll extends StatelessWidget {
   final td.MessagePoll poll;

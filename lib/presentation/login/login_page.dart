@@ -6,7 +6,9 @@ import 'package:country_calling_code_picker/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pixelegram/application/telegram_service.dart';
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/infrastructure/get_it/main.dart';
+import 'package:pixelegram/infrastructure/service/telegram_service.dart';
 
 
 
@@ -151,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       isSending = true;
     });
 
-    await GetIt.I<TelegramService>().setAuthenticationPhoneNumber(
+    await getIt<ITelegramService>().setAuthenticationPhoneNumber(
         '${_country!.callingCode}${_editingController.text.trim()}');
   }
 }

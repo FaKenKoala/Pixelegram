@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 import 'package:pixelegram/presentation/chat/list_tile/content/message_content_video.dart';
 import 'package:pixelegram/presentation/chat/list_tile/content/message_content_voice_note.dart';
 import 'content/content.dart';

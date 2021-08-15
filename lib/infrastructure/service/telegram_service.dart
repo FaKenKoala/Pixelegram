@@ -3,27 +3,29 @@ import 'dart:convert';
 import 'dart:io' show Directory, Platform;
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart' show ChangeNotifier;
-import 'package:get_it/get_it.dart' show GetIt;
 import 'package:global_configuration/global_configuration.dart';
+import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory, getTemporaryDirectory;
 
 import 'package:libtdjson/libtdjson.dart' show Service;
-import 'package:pixelegram/infrastructure/tdapi.dart';
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/domain/tdapi/tdapi.dart';
 import 'package:collection/collection.dart';
+import 'package:pixelegram/infrastructure/get_it/main.dart';
 
-import 'app_router.gr.dart';
-import 'get_it.dart' show LogService;
+import '../../application/router/router.dart';
+import 'log_service.dart';
 
-class TelegramService extends ChangeNotifier {
+@Singleton(as: ITelegramService)
+class TelegramService implements ITelegramService {
   Service? _service;
   late StreamController<int> _chatController;
 
   List<Chat> chats = [];
   User? me;
-  List<User> users = [];
+  List<User> _users = [];
   List<UpdateChatPosition> chatPositions = [];
   List<File> files = [];
 
@@ -37,6 +39,8 @@ class TelegramService extends ChangeNotifier {
   Stream<int> chatsStream() {
     return _chatController.stream;
   }
+
+  List<User> get users => _users;
 
   _refresh() {
     chats.sort((a, b) {
@@ -60,7 +64,7 @@ class TelegramService extends ChangeNotifier {
     // }
     _service = Service(
       start: false,
-      newVerbosityLevel: 0,//1,
+      newVerbosityLevel: 0, //1,
 
       /// encryptionKey's length should be 20?
       encryptionKey: 'wombatkoalapixelgram',
@@ -207,10 +211,10 @@ class TelegramService extends ChangeNotifier {
         if (newUser.id == me?.id) {
           me = newUser;
         }
-        users
+        _users
           ..removeWhere((user) => user.id == newUser.id)
           ..add(newUser);
-        print('用户人数:${users.length}');
+        print('用户人数:${_users.length}');
         _refresh();
         break;
     }
@@ -220,7 +224,7 @@ class TelegramService extends ChangeNotifier {
     if (state == null) {
       return;
     }
-    AppRouter appRouter = GetIt.I<AppRouter>();
+    AppRouter appRouter = getIt<AppRouter>();
     PageRouteInfo info;
 
     switch (state.getConstructor()) {
@@ -294,6 +298,7 @@ class TelegramService extends ChangeNotifier {
     await _sendSync(GetFile(fileId: fileId));
   }
 
+  @override
   String? getLocalFile(int? fileId) {
     if (fileId == null) {
       return null;

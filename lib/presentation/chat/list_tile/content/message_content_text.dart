@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pixelegram/infrastructure/tdapi.dart' as td;
+import 'package:pixelegram/domain/tdapi/tdapi.dart' as td;
 import 'package:pixelegram/infrastructure/util.dart';
+
 class MessageContentText extends StatelessWidget {
   final td.ChatType chatType;
 
