@@ -13,5 +13,7 @@ abstract class ITelegramService {
   Future setAuthenticationPhoneNumber(String phoneNumber);
 
   Stream<int> chatsStream();
-  Stream<Message> messageStream();
+  Stream<Message> messageStream(int chatId);
+  String? getUsername(int? userId);
+  String? getUserAvatar(int? userId);
 }

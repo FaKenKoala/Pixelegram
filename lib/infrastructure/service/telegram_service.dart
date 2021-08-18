@@ -17,36 +17,47 @@ import 'package:collection/collection.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 
 import 'log_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 @Singleton(as: ITelegramService)
 class TelegramService implements ITelegramService {
   Service? _service;
-  late StreamController<int> _chatController;
-  late StreamController<Message> _messageController;
+  late BehaviorSubject<int> _chatController;
   List<Chat> chats = [];
   User? me;
   List<User> users = [];
   List<File> files = [];
 
+  CurrentChatController? currentChatController;
+
   TelegramService() {
-    _chatController = StreamController.broadcast();
-    _messageController = StreamController.broadcast();
+    _chatController = BehaviorSubject.seeded(0);
     _init();
   }
-
-  int _value = 0;
 
   Stream<int> chatsStream() {
     return _chatController.stream;
   }
 
-  Stream<Message> messageStream() {
-    return _messageController.stream;
+  Stream<Message> messageStream(int chatId) {
+    if (currentChatController == null ||
+        currentChatController!.chatId != chatId) {
+      currentChatController?.dispose();
+      currentChatController = CurrentChatController(chatId: chatId);
+    }
+    return currentChatController!.controller.stream;
+  }
+
+  StreamController? _getMessageController(int? chatId) {
+    if (chatId != null && currentChatController?.chatId == chatId) {
+      return currentChatController!.controller;
+    }
+    return null;
   }
 
   _refreshLastMessage() {
     chats.sort(chatComparator);
-    _chatController.add(_value++);
+    _chatController.add(_chatController.value + 1);
   }
 
   _init() async {
@@ -153,7 +164,7 @@ class TelegramService implements ITelegramService {
         break;
       case UpdateNewMessage.CONSTRUCTOR:
         UpdateNewMessage tdObject = object as UpdateNewMessage;
-        _messageController.add(tdObject.message!);
+        _getMessageController(tdObject.message?.chatId)?.add(tdObject.message!);
         break;
       case UpdateChatLastMessage.CONSTRUCTOR:
         UpdateChatLastMessage tdObject = object as UpdateChatLastMessage;
@@ -309,6 +320,26 @@ class TelegramService implements ITelegramService {
     return file.local!.path!;
   }
 
+  String? getUsername(int? userId) {
+    if (userId == null) {
+      return null;
+    }
+    return users.firstWhereOrNull((element) => element.id == userId)?.firstName;
+  }
+
+  String? getUserAvatar(int? userId) {
+    if (userId == null) {
+      return null;
+    }
+
+    int? fileId = users
+        .firstWhereOrNull((element) => element.id == userId)
+        ?.profilePhoto
+        ?.small
+        ?.id;
+    return getLocalFile(fileId);
+  }
+
   Future downloadFile(int? fileId) async {
     if (fileId == null) return;
     await _send(DownloadFile(fileId: fileId));
@@ -334,5 +365,18 @@ class TelegramService implements ITelegramService {
 extension MapX on Map<String, dynamic> {
   Map<String, dynamic> removeNull() {
     return this..removeWhere((key, value) => value == null);
+  }
+}
+
+class CurrentChatController {
+  int chatId;
+  late PublishSubject<Message> controller;
+
+  CurrentChatController({required this.chatId}) {
+    controller = PublishSubject();
+  }
+
+  void dispose() {
+    controller.close();
   }
 }

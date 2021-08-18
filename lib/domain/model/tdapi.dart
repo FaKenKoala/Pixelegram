@@ -7,3 +7,11 @@ Comparator<Chat> chatComparator = (Chat a, Chat b) {
   int positionB = b.positions?.firstOrNull?.order ?? 0;
   return positionB.compareTo(positionA);
 };
+
+Comparator<PhotoSize> sizeComparator = (PhotoSize a, PhotoSize b) {
+  bool widthLarger = a.width! >= a.height!;
+  if (widthLarger) {
+    return b.width!.compareTo(a.width!);
+  }
+  return b.height!.compareTo(a.height!);
+};

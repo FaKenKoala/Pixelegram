@@ -1,0 +1,47 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:pixelegram/domain/model/tdapi.dart' as td;
+import 'package:pixelegram/domain/service/i_telegram_service.dart';
+import 'package:pixelegram/infrastructure/get_it/main.dart';
+import 'package:collection/collection.dart';
+import 'dart:math';
+
+import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
+
+class ItemContentPhoto extends StatelessWidget {
+  final td.MessagePhoto photo;
+
+  const ItemContentPhoto({Key? key, required this.photo}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<td.PhotoSize> sizes = photo.photo!.sizes!..sort(td.sizeComparator);
+    td.PhotoSize size = sizes.first;
+    String path = getIt<ITelegramService>().getLocalFile(size.photo?.id) ?? '';
+    File file = File(path);
+    double aspectRatio = size.width! / size.height!;
+    double maxHeight = 300;
+    double maxWidth = min(maxHeight * aspectRatio,
+        MediaQuery.of(context).size.width - (10 + 40 + 8) * 2);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        constraints: BoxConstraints(
+            minWidth: 70, maxWidth: max(70, maxWidth), maxHeight: maxHeight),
+        color: Colors.grey.withAlpha(128),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
+          child: AspectRatio(
+              aspectRatio: size.width! / size.height!,
+              child: file.existsSync()
+                  ? Image.file(
+                      File(path),
+                      fit: BoxFit.contain,
+                    )
+                  : Base64Image(base64Str: photo.photo!.minithumbnail!.data!)),
+        ),
+      ),
+    );
+  }
+}

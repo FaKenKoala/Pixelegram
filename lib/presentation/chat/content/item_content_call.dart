@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:pixelegram/domain/model/tdapi.dart' as td;
+import 'package:pixelegram/infrastructure/util/util.dart';
+
+class ItemContentCall extends StatelessWidget {
+  final td.MessageCall call;
+
+  const ItemContentCall({Key? key, required this.call}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String discardReason = call.discardReason == null ||
+            call.discardReason is td.CallDiscardReasonEmpty
+        ? 'End'
+        : call.discardReason!
+            .getConstructor()
+            .replaceAll('callDiscardReason', '');
+    discardReason += ' Call';
+    return Text(
+      discardReason,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
+  }
+}
