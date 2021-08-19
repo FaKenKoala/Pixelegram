@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pixelegram/domain/model/tdapi.dart' as td;
 import 'package:pixelegram/domain/service/i_telegram_service.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
+import 'package:pixelegram/infrastructure/util/util.dart';
 import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math';
@@ -40,7 +41,6 @@ class _ItemContentAnimationState extends State<ItemContentAnimation> {
     if (path != null && File(path!).existsSync()) {
       _controller = VideoPlayerController.file(File(path!))
         ..initialize().then((value) {
-          print('初始化了');
           setState(() {
             _controller!.play();
           });
@@ -58,11 +58,11 @@ class _ItemContentAnimationState extends State<ItemContentAnimation> {
   Widget build(BuildContext context) {
     _initController();
 
-    double maxHeight = 300;
-    double maxWidth = min(maxHeight * aspectRatio,
-        MediaQuery.of(context).size.width - (10 + 40 + 8) * 2);
+    Size size = ConstraintSize.size(
+        aspectRatio: aspectRatio,
+        screenWidth: MediaQuery.of(context).size.width);
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
+      constraints: BoxConstraints(maxWidth: size.width, maxHeight: size.height),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: AspectRatio(
