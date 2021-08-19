@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 class ConstraintSize {
   static Size size(
       {required double aspectRatio,
@@ -13,5 +15,10 @@ class ConstraintSize {
         min(maxHeight * aspectRatio, screenWidth - (10 + 40 + 8) * 2));
 
     return Size(maxWidth, maxHeight);
+  }
+
+  static double maxWidth(BuildContext context,
+      {double widthPadding = (10 + 40 + 8) * 2}) {
+    return MediaQuery.of(context).size.width - widthPadding;
   }
 }
