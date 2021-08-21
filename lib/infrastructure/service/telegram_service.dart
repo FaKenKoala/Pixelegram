@@ -17,6 +17,7 @@ import 'package:pixelegram/domain/model/tdapi.dart';
 import 'package:collection/collection.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 import 'package:path/path.dart' as p;
+import 'package:pixelegram/infrastructure/util/util.dart';
 
 import 'log_service.dart';
 import 'package:rxdart/rxdart.dart';
@@ -356,27 +357,17 @@ class TelegramService implements ITelegramService {
     if (animationPath == null) {
       return null;
     }
-    print('原图路径: $animationPath');
-
-    String gifPath =
-        '${p.dirname(animationPath)}/${p.basenameWithoutExtension(animationPath)}.gif';
-
-    dart.File gifFile = dart.File(gifPath);
-    if (!gifFile.existsSync() || gifFile.lengthSync() == 0) {
-      FlutterFFmpeg().execute('-i $animationPath $gifPath').then((result) {
-        if (result != 0) {
-          if (gifFile.existsSync()) gifFile.deleteSync();
-        } else {
-          _refreshLastMessage();
-        }
-      });
-      return null;
-    }
-    return gifPath;
+    String? gifPath = checkGifExists(animationPath);
+    if (gifPath != null) return gifPath;
+    generateGif(animationPath).then((result) {
+      if (result != null) {
+        _refreshLastMessage();
+      }
+    });
+    return null;
   }
 
-  Future getChatHistory(
-      {required int chatId, int fromMessageId = 0}) async {
+  Future getChatHistory({required int chatId, int fromMessageId = 0}) async {
     _send(GetChatHistory(
         chatId: chatId, fromMessageId: fromMessageId, limit: 20));
   }

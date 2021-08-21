@@ -34,6 +34,7 @@ class _ItemContentVideoState extends State<ItemContentVideo> {
     path =
         getIt<ITelegramService>().getLocalFile(widget.video.video?.video?.id);
 
+    if (path == null) return;
     thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: path!,
       thumbnailPath: (await getTemporaryDirectory()).path,
@@ -53,7 +54,8 @@ class _ItemContentVideoState extends State<ItemContentVideo> {
     return GestureDetector(
       onTap: () {
         if (thumbnailPath != null) {
-          getIt<AppRouter>().push(VideoPlayPageRoute(videoFile: path!, aspectRatio: aspectRatio));
+          getIt<AppRouter>().push(
+              VideoPlayPageRoute(videoFile: path!, aspectRatio: aspectRatio));
         }
       },
       child: ConstrainedBox(
