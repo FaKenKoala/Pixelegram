@@ -6,8 +6,6 @@ import 'package:pixelegram/domain/service/i_telegram_service.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
 import 'package:pixelegram/infrastructure/util/util.dart';
 import 'package:pixelegram/presentation/custom_widget/custom_widget.dart';
-import 'package:video_player/video_player.dart';
-import 'dart:math';
 
 class ItemContentAnimation extends StatefulWidget {
   final td.MessageAnimation animation;
@@ -20,9 +18,8 @@ class ItemContentAnimation extends StatefulWidget {
 }
 
 class _ItemContentAnimationState extends State<ItemContentAnimation> {
-  VideoPlayerController? _controller;
   late double aspectRatio;
-  String? path;
+  String? gifPath;
   @override
   void initState() {
     super.initState();
@@ -30,47 +27,34 @@ class _ItemContentAnimationState extends State<ItemContentAnimation> {
         widget.animation.animation!.height!;
   }
 
-  void _initController() {
-    if (_controller != null) return;
-
-    path = getIt<ITelegramService>()
-        .getLocalFile(widget.animation.animation?.animation?.id);
-
-    print('路径path: $path, _controller: $_controller');
-
-    if (path != null && File(path!).existsSync()) {
-      _controller = VideoPlayerController.file(File(path!))
-        ..initialize().then((value) {
-          setState(() {
-            _controller!.play();
-          });
-        });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
+  getGifPath() async {
+    if (gifPath != null) return;
+    gifPath = getIt<ITelegramService>()
+        .getAnimationGif(widget.animation.animation?.animation?.id);
   }
 
   @override
   Widget build(BuildContext context) {
-    _initController();
-
-    Size size = ConstraintSize.size(
-        aspectRatio: aspectRatio,
-        screenWidth: MediaQuery.of(context).size.width);
+    getGifPath();
+    Size size = ConstraintSize.size(aspectRatio: aspectRatio, context: context);
+    String? minithumbData = widget.animation.animation!.minithumbnail!.data;
+    File file = File(gifPath ?? '');
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: size.width, maxHeight: size.height),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: AspectRatio(
           aspectRatio: aspectRatio,
-          child: _controller != null && _controller!.value.isInitialized
-              ? VideoPlayer(_controller!)
-              : Base64Image(
-                  base64Str: widget.animation.animation!.minithumbnail!.data!),
+          child: file.existsSync()
+              ? Image.file(
+                  file,
+                  gaplessPlayback: true,
+                  filterQuality: FilterQuality.high,
+                  fit: BoxFit.cover,
+                )
+              : minithumbData != null
+                  ? Base64Image(base64Str: minithumbData)
+                  : Container(),
         ),
       ),
     );

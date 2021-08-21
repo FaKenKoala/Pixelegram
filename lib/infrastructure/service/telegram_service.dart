@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Directory, Platform;
+import 'dart:io' as dart;
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,6 +16,7 @@ import 'package:pixelegram/domain/service/i_telegram_service.dart';
 import 'package:pixelegram/domain/model/tdapi.dart';
 import 'package:collection/collection.dart';
 import 'package:pixelegram/infrastructure/get_it/main.dart';
+import 'package:path/path.dart' as p;
 
 import 'log_service.dart';
 import 'package:rxdart/rxdart.dart';
@@ -23,6 +25,7 @@ import 'package:rxdart/rxdart.dart';
 class TelegramService implements ITelegramService {
   Service? _service;
   late BehaviorSubject<int> _chatController;
+  late PublishSubject<List<Message>> _historyController;
   List<Chat> chats = [];
   User? me;
   List<User> users = [];
@@ -32,11 +35,16 @@ class TelegramService implements ITelegramService {
 
   TelegramService() {
     _chatController = BehaviorSubject.seeded(0);
+    _historyController = PublishSubject()..add([]);
     _init();
   }
 
   Stream<int> chatsStream() {
     return _chatController.stream;
+  }
+
+  Stream<List<Message>> historyStream() {
+    return _historyController.stream;
   }
 
   Stream<Message> messageStream(int chatId) {
@@ -61,8 +69,8 @@ class TelegramService implements ITelegramService {
   }
 
   _init() async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    Directory tempDir = await getTemporaryDirectory();
+    dart.Directory appDir = await getApplicationDocumentsDirectory();
+    dart.Directory tempDir = await getTemporaryDirectory();
     print('dabaseDirectory: $appDir');
     print('fielsDirectory: $tempDir');
     // if (Platform.isAndroid || Platform.isIOS) {
@@ -131,6 +139,10 @@ class TelegramService implements ITelegramService {
     }
 
     switch (object.getConstructor()) {
+      case Messages.CONSTRUCTOR:
+        List<Message> messages = (object as Messages).messages ?? [];
+        _historyController.add(messages);
+        break;
       case UpdateAuthorizationState.CONSTRUCTOR:
         UpdateAuthorizationState tdObject = object as UpdateAuthorizationState;
         _handleAuth(tdObject.authorizationState);
@@ -183,7 +195,7 @@ class TelegramService implements ITelegramService {
         break;
       case Chats.CONSTRUCTOR:
         Chats tdObject = object as Chats;
-        print('会话列表信息: ${tdObject.toJson()}');
+        // print('会话列表信息: ${tdObject.toJson()}');
         break;
       case Chat.CONSTRUCTOR:
         Chat tdObject = object as Chat;
@@ -191,11 +203,11 @@ class TelegramService implements ITelegramService {
         break;
       case TdError.CONSTRUCTOR:
         TdError tdObject = object as TdError;
-        print("錯誤: ${tdObject.toJson()}");
+        // print("錯誤: ${tdObject.toJson()}");
         break;
       case UpdateFile.CONSTRUCTOR:
         UpdateFile tdObject = object as UpdateFile;
-        print('文件更新: ${tdObject.toJson()}');
+        // print('文件更新: ${tdObject.toJson()}');
         if (tdObject.file?.local?.isDownloadingCompleted ?? false) {
           files
             ..removeWhere((element) => element.id == tdObject.file!.id)
@@ -205,7 +217,7 @@ class TelegramService implements ITelegramService {
         break;
       case File.CONSTRUCTOR:
         File tdObject = object as File;
-        print('本地文件: ${tdObject.toJson()}');
+        // print('本地文件: ${tdObject.toJson()}');
         files
           ..removeWhere((element) => element.id == tdObject.id)
           ..add(object);
@@ -223,7 +235,6 @@ class TelegramService implements ITelegramService {
         users
           ..removeWhere((user) => user.id == newUser.id)
           ..add(newUser);
-        print('用户人数:${users.length}');
         _refreshLastMessage();
         break;
     }
@@ -338,6 +349,36 @@ class TelegramService implements ITelegramService {
         ?.small
         ?.id;
     return getLocalFile(fileId);
+  }
+
+  String? getAnimationGif(int? fileId) {
+    String? animationPath = getLocalFile(fileId);
+    if (animationPath == null) {
+      return null;
+    }
+    print('原图路径: $animationPath');
+
+    String gifPath =
+        '${p.dirname(animationPath)}/${p.basenameWithoutExtension(animationPath)}.gif';
+
+    dart.File gifFile = dart.File(gifPath);
+    if (!gifFile.existsSync() || gifFile.lengthSync() == 0) {
+      FlutterFFmpeg().execute('-i $animationPath $gifPath').then((result) {
+        if (result != 0) {
+          if (gifFile.existsSync()) gifFile.deleteSync();
+        } else {
+          _refreshLastMessage();
+        }
+      });
+      return null;
+    }
+    return gifPath;
+  }
+
+  Future getChatHistory(
+      {required int chatId, int fromMessageId = 0}) async {
+    _send(GetChatHistory(
+        chatId: chatId, fromMessageId: fromMessageId, limit: 20));
   }
 
   Future downloadFile(int? fileId) async {

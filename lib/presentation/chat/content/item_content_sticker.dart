@@ -33,7 +33,7 @@ class ItemContentSticker extends StatelessWidget {
 
     Size size = ConstraintSize.size(
         aspectRatio: aspectRatio,
-        screenWidth: MediaQuery.of(context).size.width);
+         context: context);
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: size.width, maxHeight: size.height),

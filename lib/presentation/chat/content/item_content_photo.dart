@@ -25,7 +25,7 @@ class ItemContentPhoto extends StatelessWidget {
     Size constraintSize = ConstraintSize.size(
       minWidth: 70,
         aspectRatio: aspectRatio,
-        screenWidth: MediaQuery.of(context).size.width);
+        context: context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(

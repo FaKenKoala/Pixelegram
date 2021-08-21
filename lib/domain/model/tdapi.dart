@@ -8,6 +8,10 @@ Comparator<Chat> chatComparator = (Chat a, Chat b) {
   return positionB.compareTo(positionA);
 };
 
+Comparator<Message> messageComparator = (Message a, Message b) {
+  return a.id!.compareTo(b.id!);
+};
+
 Comparator<PhotoSize> sizeComparator = (PhotoSize a, PhotoSize b) {
   bool widthLarger = a.width! >= a.height!;
   if (widthLarger) {
